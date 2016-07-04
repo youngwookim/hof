@@ -1,0 +1,60 @@
+#!/bin/bash
+
+SOURCE="${BASH_SOURCE[0]}"
+BIN_DIR="$( dirname "$SOURCE" )"
+while [ -h "$SOURCE" ]
+do
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+  BIN_DIR="$( cd -P "$( dirname "$SOURCE"  )" && pwd )"
+done
+BIN_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+LIB_DIR="$(dirname "$BIN_DIR")"
+HADOOP_CLASSPATH=$( { hadoop classpath; } 2>&1 )
+HBASE_CLASSPATH=$( { hbase classpath; } 2>&1 )
+HBASE_PATH="/opt/cloudera/parcels/CDH/lib/hbase"
+CLASSPATH=$LIB_DIR'/lib/*:'$LIB_DIR'/conf:'$HADOOP_CLASSPATH:$HBASE_CLASSPATH
+CLASS=''
+JARS=''
+LOG4J=-Dlog4j.configuration=file:$LIB_DIR'/conf/log4j.properties'
+JAVA='java -cp'
+TMP_JARS='-libjars '
+for entry in "$LIB_DIR"/lib/*
+do
+    TMP_JARS=$TMP_JARS$entry","
+done
+for entry in "$HBASE_PATH"/*.jar
+do
+    TMP_JARS=$TMP_JARS$entry","
+done
+for entry in "$HBASE_PATH"/lib/*.jar
+do
+    TMP_JARS=$TMP_JARS$entry","
+done
+if [ "$1" == "hof" ]; then
+	CLASS="com.spright.hof.HdfsOverFtpServer"
+elif [ "$1" == "run_class" ]; then
+    if [ "$2" == "" ]; then
+        echo "Usage: hof run_class <class> [<args>]"
+        exit 1
+    fi
+    CLASS=$2
+    shift 1
+else
+    echo "Usage: hof <tool> [<args>]"
+    echo "Some Tools take arguments."
+    echo "Tools:"
+    echo "  hof                     Executes hdfs-over-ftp server"
+    echo "  run_class               Run the custom class"
+    exit 1
+fi
+ARGS=""
+shift 1
+i=0
+while [ -n "$1" ]
+do
+	ARGS=$ARGS" "$1
+	i=$(($i+1))	
+	shift	
+done
+exec $JAVA $CLASSPATH $LOG4J $CLASS $JARS $ARGS
