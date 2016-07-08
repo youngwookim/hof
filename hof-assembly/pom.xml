@@ -9,7 +9,7 @@
   <artifactId>hof-assembly</artifactId>
   <name>HOF - Assembly</name>
   <packaging>pom</packaging>
-    
+
   <build>
     <plugins>
       <plugin>

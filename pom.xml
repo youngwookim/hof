@@ -26,6 +26,7 @@
     <assembly.version>2.5.5</assembly.version>
     <ftpserver.version>1.0.0-M3</ftpserver.version>
     <mina.version>2.0.1</mina.version>
+    <mockito-all.version>1.10.19</mockito-all.version>
   </properties>
 
   <repositories>
@@ -63,6 +64,18 @@
         <groupId>org.apache.ftpserver</groupId>
         <artifactId>ftpserver-core</artifactId>
         <version>${ftpserver.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>${mockito-all.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -44,7 +44,7 @@ i=0
 while [ -n "$1" ]
 do
 	ARGS=$ARGS" "$1
-	i=$(($i+1))	
-	shift	
+	i=$(($i+1))
+	shift
 done
 exec $JAVA $CLASSPATH $EXTRA_ARGS $LOG4J $CLASS $JARS $ARGS
