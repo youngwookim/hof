@@ -323,9 +323,11 @@ public class HdfsUserManager extends AbstractUserManager {
     user.setHomeDirectory(userDataProp
             .getProperty(baseKey + ATTR_HOME, "/"));
 
-    user.setGroups(parseGroups(userDataProp
-            .getProperty(baseKey + "groups")));
-
+    //Because user is an interface,so we should not promise every one has groups property.
+    if (userDataProp.getProperty(baseKey + "groups") != null) {
+      user.setGroups(parseGroups(userDataProp
+              .getProperty(baseKey + "groups")));
+    }
     List<Authority> authorities = new ArrayList<Authority>();
 
     if (userDataProp.getBoolean(baseKey + ATTR_WRITE_PERM, false)) {
