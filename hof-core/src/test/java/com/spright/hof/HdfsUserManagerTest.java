@@ -35,7 +35,7 @@ public class HdfsUserManagerTest {
   }
 
   @BeforeClass
-  public static void setUpClass() {
+  public static void setUpClass() throws IOException {
     System.out.println("setUpClass:");
 
     USER1 = Mockito.mock(User.class);
@@ -54,28 +54,21 @@ public class HdfsUserManagerTest {
     Mockito.when(USER2.getHomeDirectory()).thenReturn(DEFAULT_HOME);
     Mockito.when(USER2.getEnabled()).thenReturn(DEFAULT_ENABLE);
 
-    try {
-      TEMP_CONF_FILE = File.createTempFile("userConfTest", ".tmp");
-    } catch (IOException ex) {
-      fail("Fail when create temp file.");
-    }
+    TEMP_CONF_FILE = File.createTempFile("userConfTest", ".tmp");
 
-    try (FileWriter fw = new FileWriter(TEMP_CONF_FILE)) {
-      System.out.println("Temp file : " + TEMP_CONF_FILE.getAbsolutePath());
-      fw.write("ftpserver.user.confUsr.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
-      fw.write("ftpserver.user.confUsr.homedirectory=/\n");
-      fw.write("ftpserver.user.confUsr.enableflag=true\n");
-      fw.write("ftpserver.user.confUsr.writepermission=true\n");
-      fw.write("ftpserver.user.confUsr.maxloginnumber=0\n");
-      fw.write("ftpserver.user.confUsr.maxloginperip=0\n");
-      fw.write("ftpserver.user.confUsr.idletime=0\n");
-      fw.write("ftpserver.user.confUsr.uploadrate=0\n");
-      fw.write("ftpserver.user.confUsr.downloadrate=0\n");
-      fw.write("ftpserver.user.confUsr.groups=confUsr,users");
-    } catch (IOException ex) {
-      ex.printStackTrace();
-      fail("Fail when writing temp file data.");
-    }
+    FileWriter fw = new FileWriter(TEMP_CONF_FILE);
+    System.out.println("Temp file : " + TEMP_CONF_FILE.getAbsolutePath());
+    fw.write("ftpserver.user.confUsr.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
+    fw.write("ftpserver.user.confUsr.homedirectory=/\n");
+    fw.write("ftpserver.user.confUsr.enableflag=true\n");
+    fw.write("ftpserver.user.confUsr.writepermission=true\n");
+    fw.write("ftpserver.user.confUsr.maxloginnumber=0\n");
+    fw.write("ftpserver.user.confUsr.maxloginperip=0\n");
+    fw.write("ftpserver.user.confUsr.idletime=0\n");
+    fw.write("ftpserver.user.confUsr.uploadrate=0\n");
+    fw.write("ftpserver.user.confUsr.downloadrate=0\n");
+    fw.write("ftpserver.user.confUsr.groups=confUsr,users");
+    fw.close();
   }
 
   @AfterClass
