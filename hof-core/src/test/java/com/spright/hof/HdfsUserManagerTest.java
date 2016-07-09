@@ -1,12 +1,9 @@
 package com.spright.hof;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
@@ -23,66 +20,68 @@ import org.mockito.Mockito;
 
 public class HdfsUserManagerTest {
 
-  private static User user1;
-  private static User user2;
-  private static File tempConfFile;
+  private static User USER1;
+  private static User USER2;
+  private static File TEMP_CONF_FILE;
 
-  public HdfsUserManagerTest() {
+  private final static String DEFAULT_PASSWORD = "pwd";
+  private final static Authority[] DEFAULT_AUTHORITIES = null;
+  private final static int DEFAULT_MAXIDLETIME = 123;
+  private final static String DEFAULT_HOME = "/home";
+  private final static boolean DEFAULT_ENABLE = false;
+
+  public HdfsUserManagerTest() throws IOException {
+
   }
 
   @BeforeClass
   public static void setUpClass() {
     System.out.println("setUpClass:");
 
-    user1 = Mockito.mock(User.class);
-    Mockito.when(user1.getName()).thenReturn("user1");
-    Mockito.when(user1.getPassword()).thenReturn("pwd");
-    Mockito.when(user1.getAuthorities()).thenReturn(null);
-    Mockito.when(user1.getMaxIdleTime()).thenReturn(123);
-    Mockito.when(user1.getHomeDirectory()).thenReturn("/home");
-    Mockito.when(user1.getEnabled()).thenReturn(false);
+    USER1 = Mockito.mock(User.class);
+    Mockito.when(USER1.getName()).thenReturn("user1");
+    Mockito.when(USER1.getPassword()).thenReturn(DEFAULT_PASSWORD);
+    Mockito.when(USER1.getAuthorities()).thenReturn(DEFAULT_AUTHORITIES);
+    Mockito.when(USER1.getMaxIdleTime()).thenReturn(DEFAULT_MAXIDLETIME);
+    Mockito.when(USER1.getHomeDirectory()).thenReturn(DEFAULT_HOME);
+    Mockito.when(USER1.getEnabled()).thenReturn(DEFAULT_ENABLE);
 
-    user2 = Mockito.mock(User.class);
-    Mockito.when(user2.getName()).thenReturn("user2");
-    Mockito.when(user2.getPassword()).thenReturn("pwd");
-    Mockito.when(user2.getAuthorities()).thenReturn(null);
-    Mockito.when(user2.getMaxIdleTime()).thenReturn(123);
-    Mockito.when(user2.getHomeDirectory()).thenReturn("/home");
-    Mockito.when(user2.getEnabled()).thenReturn(false);
+    USER2 = Mockito.mock(User.class);
+    Mockito.when(USER2.getName()).thenReturn("user2");
+    Mockito.when(USER2.getPassword()).thenReturn(DEFAULT_PASSWORD);
+    Mockito.when(USER2.getAuthorities()).thenReturn(DEFAULT_AUTHORITIES);
+    Mockito.when(USER2.getMaxIdleTime()).thenReturn(DEFAULT_MAXIDLETIME);
+    Mockito.when(USER2.getHomeDirectory()).thenReturn(DEFAULT_HOME);
+    Mockito.when(USER2.getEnabled()).thenReturn(DEFAULT_ENABLE);
 
-    //create a temp file
-    FileWriter fw = null;
     try {
-      tempConfFile = File.createTempFile("userConfTest", ".tmp");
-      System.out.println("Temp file : " + tempConfFile.getAbsolutePath());
-      fw = new FileWriter(tempConfFile.getAbsoluteFile());
-      fw.write("ftpserver.user.firstuser.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
-      fw.write("ftpserver.user.firstuser.homedirectory=/\n");
-      fw.write("ftpserver.user.firstuser.enableflag=true\n");
-      fw.write("ftpserver.user.firstuser.writepermission=true\n");
-      fw.write("ftpserver.user.firstuser.maxloginnumber=0\n");
-      fw.write("ftpserver.user.firstuser.maxloginperip=0\n");
-      fw.write("ftpserver.user.firstuser.idletime=0\n");
-      fw.write("ftpserver.user.firstuser.uploadrate=0\n");
-      fw.write("ftpserver.user.firstuser.downloadrate=0\n");
-      fw.write("ftpserver.user.firstuser.groups=firstuser,users");
+      TEMP_CONF_FILE = File.createTempFile("userConfTest", ".tmp");
+    } catch (IOException ex) {
+      fail("Fail when create temp file.");
+    }
+
+    try (FileWriter fw = new FileWriter(TEMP_CONF_FILE)) {
+      System.out.println("Temp file : " + TEMP_CONF_FILE.getAbsolutePath());
+      fw.write("ftpserver.user.confUsr.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
+      fw.write("ftpserver.user.confUsr.homedirectory=/\n");
+      fw.write("ftpserver.user.confUsr.enableflag=true\n");
+      fw.write("ftpserver.user.confUsr.writepermission=true\n");
+      fw.write("ftpserver.user.confUsr.maxloginnumber=0\n");
+      fw.write("ftpserver.user.confUsr.maxloginperip=0\n");
+      fw.write("ftpserver.user.confUsr.idletime=0\n");
+      fw.write("ftpserver.user.confUsr.uploadrate=0\n");
+      fw.write("ftpserver.user.confUsr.downloadrate=0\n");
+      fw.write("ftpserver.user.confUsr.groups=confUsr,users");
     } catch (IOException ex) {
       ex.printStackTrace();
-    } finally {
-      if (fw != null) {
-        try {
-          fw.close();
-        } catch (IOException ex) {
-          ex.printStackTrace();
-        }
-      }
+      fail("Fail when writing temp file data.");
     }
   }
 
   @AfterClass
   public static void tearDownClass() {
-    if (tempConfFile != null) {
-      tempConfFile.delete();
+    if (TEMP_CONF_FILE != null) {
+      TEMP_CONF_FILE.delete();
     }
   }
 
@@ -104,6 +103,7 @@ public class HdfsUserManagerTest {
     File expResult = new File("testFile");
     instance.setFile(expResult);
     File result = instance.getFile();
+
     assertEquals(expResult, result);
   }
 
@@ -117,6 +117,7 @@ public class HdfsUserManagerTest {
     PasswordEncryptor expResult = new Md5PasswordEncryptor();
     instance.setPasswordEncryptor(expResult);
     PasswordEncryptor result = instance.getPasswordEncryptor();
+
     assertEquals(expResult, result);
   }
 
@@ -127,15 +128,12 @@ public class HdfsUserManagerTest {
   public void testConfigure() {
     System.out.println("configure");
     HdfsUserManager instance = new HdfsUserManager();
-    if (tempConfFile == null) {
-      fail("Can't create test conf file.");
-    }
-    instance.setFile(tempConfFile);
+    instance.setFile(TEMP_CONF_FILE);
     instance.configure();
-    User expUser = instance.getUserByName("firstuser");
+    User expUser = instance.getUserByName("confUsr");
 
-    assertTrue(instance.doesExist("firstuser"));
-    assertEquals(expUser.getName(), "firstuser");
+    assertTrue(instance.doesExist("confUsr"));
+    assertEquals(expUser.getName(), "confUsr");
     assertNotNull(expUser.authorize(new WriteRequest()));
     assertEquals(expUser.getMaxIdleTime(), 0);
     assertEquals(expUser.getHomeDirectory(), "/");
@@ -149,15 +147,15 @@ public class HdfsUserManagerTest {
   public void testSave() throws Exception {
     System.out.println("save");
     HdfsUserManager instance = new HdfsUserManager();
-    instance.save(user1);
+    instance.save(USER1);
     User expUser = instance.getUserByName("user1");
 
     assertEquals(expUser.getName(), "user1");
     //null means no permission
     assertNull(expUser.authorize(new WriteRequest()));
-    assertEquals(expUser.getMaxIdleTime(), 123);
-    assertEquals(expUser.getHomeDirectory(), "/home");
-    assertFalse(expUser.getEnabled());
+    assertEquals(DEFAULT_MAXIDLETIME, expUser.getMaxIdleTime());
+    assertEquals(DEFAULT_HOME, expUser.getHomeDirectory());
+    assertEquals(DEFAULT_ENABLE, expUser.getEnabled());
   }
 
   /**
@@ -167,10 +165,10 @@ public class HdfsUserManagerTest {
   public void testDelete() throws Exception {
     System.out.println("delete");
     String usrName = "user1";
-
     HdfsUserManager instance = new HdfsUserManager();
-    instance.save(user1);
+    instance.save(USER1);
     instance.delete(usrName);
+
     assertNull(instance.getUserByName(usrName));
   }
 
@@ -178,18 +176,14 @@ public class HdfsUserManagerTest {
    * Test of getAllUserNames method, of class HdfsUserManager.
    */
   @Test
-  public void testGetAllUserNames() {
+  public void testGetAllUserNames() throws FtpException {
     System.out.println("getAllUserNames");
     HdfsUserManager instance = new HdfsUserManager();
-    try {
-      instance.save(user1);
-      instance.save(user2);
-    } catch (FtpException ex) {
-      fail("Test fail when save users");
-    }
-
+    instance.save(USER1);
+    instance.save(USER2);
     String[] result = instance.getAllUserNames();
     String[] expResult = {"user1", "user2"};
+
     assertArrayEquals(expResult, result);
   }
 
@@ -197,40 +191,32 @@ public class HdfsUserManagerTest {
    * Test of getUserByName method, of class HdfsUserManager.
    */
   @Test
-  public void testGetUserByName() {
+  public void testGetUserByName() throws FtpException {
     System.out.println("getUserByName");
     String userName = "user1";
     HdfsUserManager instance = new HdfsUserManager();
-    try {
-      instance.save(user1);
-    } catch (FtpException ex) {
-      fail("Test fail when save users");
-    }
+    instance.save(USER1);
 
     User expUser = instance.getUserByName(userName);
     assertEquals("user1", expUser.getName());
     //null means no permission
     assertNull(expUser.authorize(new WriteRequest()));
-    assertEquals(123, expUser.getMaxIdleTime());
-    assertEquals("/home", expUser.getHomeDirectory());
-    assertEquals(false, expUser.getEnabled());
+    assertEquals(DEFAULT_MAXIDLETIME, expUser.getMaxIdleTime());
+    assertEquals(DEFAULT_HOME, expUser.getHomeDirectory());
+    assertEquals(DEFAULT_ENABLE, expUser.getEnabled());
   }
 
   /**
    * Test of doesExist method, of class HdfsUserManager.
    */
   @Test
-  public void testDoesExist() {
+  public void testDoesExist() throws FtpException {
     System.out.println("doesExist");
     String name = "user1";
     HdfsUserManager instance = new HdfsUserManager();
-    try {
-      instance.save(user1);
-    } catch (FtpException ex) {
-      fail("Test fail when save users");
-    }
-
+    instance.save(USER1);
     boolean result = instance.doesExist(name);
+
     assertTrue(result);
   }
 
@@ -240,37 +226,31 @@ public class HdfsUserManagerTest {
   @Test
   public void testAuthenticate() throws Exception {
     System.out.println("authenticate");
-    UsernamePasswordAuthentication authentication = new UsernamePasswordAuthentication("user1", "pwd");
-
+    UsernamePasswordAuthentication authentication = new UsernamePasswordAuthentication(USER1.getName(), USER1.getPassword());
     HdfsUserManager instance = new HdfsUserManager();
-    instance.save(user1);
+    instance.save(USER1);
     User expUser = instance.authenticate(authentication);
 
     assertEquals(expUser.getName(), "user1");
     //null means no permission
     assertNull(expUser.authorize(new WriteRequest()));
-    assertEquals(123, expUser.getMaxIdleTime());
-    assertEquals("/home", expUser.getHomeDirectory());
-    assertEquals(false, expUser.getEnabled());
+    assertEquals(DEFAULT_MAXIDLETIME, expUser.getMaxIdleTime());
+    assertEquals(DEFAULT_HOME, expUser.getHomeDirectory());
+    assertEquals(DEFAULT_ENABLE, expUser.getEnabled());
   }
 
   /**
    * Test of dispose method, of class HdfsUserManager.
    */
   @Test(expected = NullPointerException.class)
-  public void testDoesExistAfterDispose() {
+  public void testDoesExistAfterDispose() throws FtpException {
     System.out.println("test dispose");
     HdfsUserManager instance = new HdfsUserManager();
-    try {
-      instance.save(user1);
-    } catch (FtpException ex) {
-      fail("Test fail when save users");
-    }
+    instance.save(USER1);
+
     assertTrue(instance.doesExist("user1"));
     instance.dispose();
-
     //Set userDataProp null,so many function will cause NullPointerException
     instance.doesExist("user1");
   }
-
 }
