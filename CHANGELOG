@@ -4,4 +4,4 @@ Release 0.1.1 - unrelased
     TASKS
     IMPROVEMENT
       HOF-0001 Add the mockito and junit
-	  HOF-0008 Add Test for HdfsUserManager.java
+      HOF-0008 Add Test for HdfsUserManager.java
