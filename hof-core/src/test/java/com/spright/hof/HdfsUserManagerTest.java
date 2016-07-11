@@ -55,20 +55,19 @@ public class HdfsUserManagerTest {
     Mockito.when(USER2.getEnabled()).thenReturn(DEFAULT_ENABLE);
 
     TEMP_CONF_FILE = File.createTempFile("userConfTest", ".tmp");
-
-    FileWriter fw = new FileWriter(TEMP_CONF_FILE);
-    System.out.println("Temp file : " + TEMP_CONF_FILE.getAbsolutePath());
-    fw.write("ftpserver.user.confUsr.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
-    fw.write("ftpserver.user.confUsr.homedirectory=/\n");
-    fw.write("ftpserver.user.confUsr.enableflag=true\n");
-    fw.write("ftpserver.user.confUsr.writepermission=true\n");
-    fw.write("ftpserver.user.confUsr.maxloginnumber=0\n");
-    fw.write("ftpserver.user.confUsr.maxloginperip=0\n");
-    fw.write("ftpserver.user.confUsr.idletime=0\n");
-    fw.write("ftpserver.user.confUsr.uploadrate=0\n");
-    fw.write("ftpserver.user.confUsr.downloadrate=0\n");
-    fw.write("ftpserver.user.confUsr.groups=confUsr,users");
-    fw.close();
+    try (FileWriter fw = new FileWriter(TEMP_CONF_FILE)) {
+      System.out.println("Temp file : " + TEMP_CONF_FILE.getAbsolutePath());
+      fw.write("ftpserver.user.confUsr.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
+      fw.write("ftpserver.user.confUsr.homedirectory=/\n");
+      fw.write("ftpserver.user.confUsr.enableflag=true\n");
+      fw.write("ftpserver.user.confUsr.writepermission=true\n");
+      fw.write("ftpserver.user.confUsr.maxloginnumber=0\n");
+      fw.write("ftpserver.user.confUsr.maxloginperip=0\n");
+      fw.write("ftpserver.user.confUsr.idletime=0\n");
+      fw.write("ftpserver.user.confUsr.uploadrate=0\n");
+      fw.write("ftpserver.user.confUsr.downloadrate=0\n");
+      fw.write("ftpserver.user.confUsr.groups=confUsr,users");
+    }
   }
 
   @AfterClass
