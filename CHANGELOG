@@ -6,3 +6,5 @@ Release 0.1.1 - unrelased
       HOF-0001 Add the mockito and junit
       HOF-0008 Add Test for HdfsUserManager
       HOF-0007 Add Test for HdfsUser
+      HOF-0004 Add Test for HdfsFileSystemView
+			
