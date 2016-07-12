@@ -20,6 +20,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <hadoop.version>2.6.0-cdh5.5.2</hadoop.version>
     <hadoop-minicluster.version>2.6.0-mr1-cdh5.5.2</hadoop-minicluster.version>
+    <slf4j-api.version>1.7.5</slf4j-api.version>
     <hbase.version>1.0.0-cdh5.5.2</hbase.version>
     <junit.version>4.11</junit.version>
     <checkstyle.version>2.16</checkstyle.version>
@@ -50,6 +51,11 @@
         <artifactId>hadoop-minicluster</artifactId>
         <version>${hadoop-minicluster.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.hbase</groupId>
