@@ -14,8 +14,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HdfsOverFtpSystemTest {
+  private static final Logger LOG = LoggerFactory.getLogger(HdfsOverFtpSystemTest.class);
   private static MiniDFSCluster CLUSTER;
   private static Configuration CONF;
   private static URI HDFS_URI;
@@ -23,20 +26,18 @@ public class HdfsOverFtpSystemTest {
   private final static String DEFAULT_FILE_PATH = "/home/file.txt";
   private final static FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
 
-  public HdfsOverFtpSystemTest() {
-  }
-
   @BeforeClass
   public static void setUpClass() throws IOException {
-    System.out.println("Starte Create MiniDFSCluster");
+    LOG.info("Start test HdfsOverFtpSystem.java");
+    LOG.info("Create MiniDFSCluster.");
     CONF = new HdfsConfiguration();
     CLUSTER = new MiniDFSCluster.Builder(CONF).build();
   }
 
   @AfterClass
   public static void tearDownClass() throws IOException {
-    System.out.println("tearDownClass");
     if (CLUSTER != null) {
+      LOG.info("Closing MiniDFSCluster");
       CLUSTER.shutdown();
       CLUSTER = null;
     }
@@ -56,6 +57,7 @@ public class HdfsOverFtpSystemTest {
    */
   @Test
   public void testGetDfs() throws IOException {
+    LOG.info("Start testGetDfs");
     HDFS_URI = CLUSTER.getURI();
     HdfsOverFtpSystem.setSuperuser("superuser");
     HdfsOverFtpSystem.setHDFS_URI(HDFS_URI.toString());
@@ -77,7 +79,7 @@ public class HdfsOverFtpSystemTest {
    */
   @Test
   public void testSetHDFS_URI(){
-    System.out.println("setHDFS_URI");
+    LOG.info("Start testSetHDFS_URI");
     String sourceURI = HdfsOverFtpSystem.HDFS_URI;
     HdfsOverFtpSystem.setHDFS_URI("URI");
     String resultURI = HdfsOverFtpSystem.HDFS_URI;

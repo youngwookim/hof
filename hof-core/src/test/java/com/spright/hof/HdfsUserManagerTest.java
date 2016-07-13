@@ -17,9 +17,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HdfsUserManagerTest {
-
+  private static final Logger LOG = LoggerFactory.getLogger(HdfsUserManagerTest.class);
   private static User USER1;
   private static User USER2;
   private static File TEMP_CONF_FILE;
@@ -30,14 +32,9 @@ public class HdfsUserManagerTest {
   private final static String DEFAULT_HOME = "/home";
   private final static boolean DEFAULT_ENABLE = false;
 
-  public HdfsUserManagerTest() throws IOException {
-
-  }
-
   @BeforeClass
   public static void setUpClass() throws IOException {
-    System.out.println("setUpClass:");
-
+    LOG.info("Start test HdfsUserManager.java");
     USER1 = Mockito.mock(User.class);
     Mockito.when(USER1.getName()).thenReturn("user1");
     Mockito.when(USER1.getPassword()).thenReturn(DEFAULT_PASSWORD);
@@ -56,7 +53,6 @@ public class HdfsUserManagerTest {
 
     TEMP_CONF_FILE = File.createTempFile("userConfTest", ".tmp");
     try (FileWriter fw = new FileWriter(TEMP_CONF_FILE)) {
-      System.out.println("Temp file : " + TEMP_CONF_FILE.getAbsolutePath());
       fw.write("ftpserver.user.confUsr.userpassword=310dcbbf4cce62f762a2aaa148d556bd\n");
       fw.write("ftpserver.user.confUsr.homedirectory=/\n");
       fw.write("ftpserver.user.confUsr.enableflag=true\n");
@@ -90,7 +86,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testSetAndGetFile() {
-    System.out.println("testSetAndGetFile");
+    LOG.info("Start testSetAndGetFile");
     HdfsUserManager instance = new HdfsUserManager();
     File expResult = new File("testFile");
     instance.setFile(expResult);
@@ -104,7 +100,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testSetAndGetPasswordEncryptor() {
-    System.out.println("getPasswordEncryptor");
+    LOG.info("Start testSetAndGetPasswordEncryptor");
     HdfsUserManager instance = new HdfsUserManager();
     PasswordEncryptor expResult = new Md5PasswordEncryptor();
     instance.setPasswordEncryptor(expResult);
@@ -118,7 +114,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testConfigure() {
-    System.out.println("configure");
+    LOG.info("Start testConfigure");
     HdfsUserManager instance = new HdfsUserManager();
     instance.setFile(TEMP_CONF_FILE);
     instance.configure();
@@ -137,7 +133,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testSave() throws Exception {
-    System.out.println("save");
+    LOG.info("Start testSave");
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
     User expUser = instance.getUserByName("user1");
@@ -155,7 +151,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testDelete() throws Exception {
-    System.out.println("delete");
+    LOG.info("Start testDelete");
     String usrName = "user1";
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
@@ -169,7 +165,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testGetAllUserNames() throws FtpException {
-    System.out.println("getAllUserNames");
+    LOG.info("Start testGetAllUserNames");
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
     instance.save(USER2);
@@ -184,7 +180,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testGetUserByName() throws FtpException {
-    System.out.println("getUserByName");
+    LOG.info("Start testGetUserByName");
     String userName = "user1";
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
@@ -203,7 +199,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testDoesExist() throws FtpException {
-    System.out.println("doesExist");
+    LOG.info("Start testDoesExist");
     String name = "user1";
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
@@ -217,7 +213,7 @@ public class HdfsUserManagerTest {
    */
   @Test
   public void testAuthenticate() throws Exception {
-    System.out.println("authenticate");
+    LOG.info("Start testAuthenticate");
     UsernamePasswordAuthentication authentication = new UsernamePasswordAuthentication(USER1.getName(), USER1.getPassword());
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
@@ -236,7 +232,7 @@ public class HdfsUserManagerTest {
    */
   @Test(expected = NullPointerException.class)
   public void testDoesExistAfterDispose() throws FtpException {
-    System.out.println("test dispose");
+    LOG.info("Start testDoesExistAfterDispose");
     HdfsUserManager instance = new HdfsUserManager();
     instance.save(USER1);
 
