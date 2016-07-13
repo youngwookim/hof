@@ -259,16 +259,24 @@ public class MySslConfiguration implements SslConfiguration {
 
   private KeyStore loadStore(File storeFile, String storeType,
           String storePass) throws IOException, GeneralSecurityException {
-    FileInputStream fin = null;
-    try {
-      fin = new FileInputStream(storeFile);
-      KeyStore store = KeyStore.getInstance(storeType);
-      store.load(fin, "333333".toCharArray());
-
+    KeyStore store = KeyStore.getInstance(storeType);
+    if(storeFile == null)
+    {
+      store.load(null, "333333".toCharArray());
       return store;
-    } finally {
-      IoUtils.close(fin);
     }
+    else
+    {
+      FileInputStream fin = null;
+      try {
+        fin = new FileInputStream(storeFile);
+        store.load(fin, "333333".toCharArray());
+        return store;
+      } finally {
+        IoUtils.close(fin);
+      }
+    }
+    
   }
 
   /**
@@ -278,10 +286,14 @@ public class MySslConfiguration implements SslConfiguration {
 
     try {
       // initialize keystore
-      LOG
+      if(keystoreFile != null)
+      {
+        LOG
               .debug(
                       "Loading key store from \"{}\", using the key store type \"{}\"",
                       keystoreFile.getAbsolutePath(), keystoreType);
+      }
+      
       KeyStore keyStore = loadStore(keystoreFile, keystoreType,
               keystorePass);
 
