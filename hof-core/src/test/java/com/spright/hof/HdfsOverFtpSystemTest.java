@@ -57,7 +57,6 @@ public class HdfsOverFtpSystemTest {
   @Test
   public void testGetDfs() throws IOException {
     HDFS_URI = CLUSTER.getURI();
-    System.out.println("HDFS_URI====="+HDFS_URI);
     HdfsOverFtpSystem.setSuperuser("superuser");
     HdfsOverFtpSystem.setHDFS_URI(HDFS_URI.toString());
 
