@@ -7,3 +7,4 @@ Release 0.1.1 - unrelased
       HOF-0008 Add Test for HdfsUserManager
       HOF-0007 Add Test for HdfsUser
       HOF-0004 Add Test for HdfsFileSystemView
+      HOF-0009 Add Test for MySslConfiguration

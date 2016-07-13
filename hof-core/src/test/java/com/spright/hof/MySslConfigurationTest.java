@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.spright.hof;
 
 import java.io.File;
@@ -28,12 +23,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author dslab
- */
 public class MySslConfigurationTest {
+  private static final Logger LOG = LoggerFactory.getLogger(MySslConfigurationTest.class);
 
   private final static String DEFAULT_KEYSTOREPASS = "333333";
   private final static File DEFAULT_KEYSTOREFILE = null;
@@ -59,9 +53,6 @@ public class MySslConfigurationTest {
   private static HashMap<String, SSLContext> SSLCONTEXTMAP;
   private static SSLContext CTX;
   private static KeyManager[] KEYMANAGERS;
-
-    public MySslConfigurationTest() {
-    }
 
     @BeforeClass
     public static void setUpClass() throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyManagementException {
@@ -104,7 +95,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetKeystoreFile() {
-        System.out.println("SetAndGetKeystoreFile");
+        LOG.info("Start testSetAndGetKeystoreFile");
         MySslConfiguration instance = new MySslConfiguration();
         File expResult = new File("test.txt");
         instance.setKeystoreFile(expResult);
@@ -116,7 +107,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetKeystorePassword() {
-        System.out.println("SetAndGetKeystorePassword");
+        LOG.info("Start testSetAndGetKeystorePassword");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "123";
         instance.setKeystorePassword(expResult);
@@ -128,7 +119,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetKeystoreType() {
-        System.out.println("SetAndGetKeystoreType");
+        LOG.info("Start testSetAndGetKeystoreType");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "txt";
         instance.setKeystoreType(expResult);
@@ -140,7 +131,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetKeystoreAlgorithm() {
-        System.out.println("SetAndGetKeystoreAlgorithm");
+        LOG.info("Start testSetAndGetKeystoreAlgorithm");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "ibmX509";
         instance.setKeystoreAlgorithm(expResult);
@@ -152,7 +143,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetSslProtocol() {
-        System.out.println("SetAndGetSslProtocol");
+        LOG.info("Start testSetAndGetSslProtocol");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "SSL";
         instance.setSslProtocol(expResult);
@@ -164,7 +155,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetClientAuthentication() {
-        System.out.println("SetAndGetClientAuthentication");
+        LOG.info("Start testSetAndGetClientAuthentication");
         MySslConfiguration instance = new MySslConfiguration();
         String clientAuthReqdString = "true";
         instance.setClientAuthentication(clientAuthReqdString);
@@ -182,7 +173,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetKeyPassword() {
-        System.out.println("SetAndGetKeyPassword");
+        LOG.info("Start testSetAndGetKeyPassword");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "456";
         instance.setKeyPassword(expResult);
@@ -194,7 +185,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetTruststoreFile() {
-        System.out.println("SetAndGetTruststoreFile");
+        LOG.info("Start testSetAndGetTruststoreFile");
         MySslConfiguration instance = new MySslConfiguration();
         File expResult = new File("TestTrustStore.txt");
         instance.setTruststoreFile(expResult);
@@ -206,7 +197,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetTruststorePassword() {
-        System.out.println("SetAndGetTruststorePassword");
+        LOG.info("Start testSetAndGetTruststorePassword");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "789";
         instance.setTruststorePassword(expResult);
@@ -218,11 +209,10 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetTruststoreType() {
-        System.out.println("SetAndGetTruststoreType");
+        LOG.info("Start testSetAndGetTruststoreType");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = KeyStore.getDefaultType();
         instance.setTruststoreType(expResult);
-        System.out.println(expResult);
         assertEquals(expResult, instance.getTruststoreType());
     }
 
@@ -231,7 +221,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetTruststoreAlgorithm() {
-        System.out.println("SetAndGetTruststoreAlgorithm");
+        LOG.info("Start testSetAndGetTruststoreAlgorithm");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "ibmX509";
         instance.setTruststoreAlgorithm(expResult);
@@ -243,7 +233,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetEnabledCipherSuites() {
-        System.out.println("SetAndGetEnabledCipherSuites");
+        LOG.info("Start testSetAndGetEnabledCipherSuites");
         MySslConfiguration instance = new MySslConfiguration();
         String[] expResult={"0","1","2"};
         instance.setEnabledCipherSuites(expResult);
@@ -258,7 +248,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testSetAndGetKeyAlias() {
-        System.out.println("SetAndGetKeyAlias");
+        LOG.info("Start testSetAndGetKeyAlias");
         MySslConfiguration instance = new MySslConfiguration();
         String expResult = "testkeyalias";
         instance.setKeyAlias(expResult);
@@ -270,7 +260,7 @@ public class MySslConfigurationTest {
      */
     @Test
     public void testInitAndGetSSLContext() throws GeneralSecurityException {
-      System.out.println("testInit and testGetSSLContext");
+      LOG.info("Start testInitAndGetSSLContext");
 
       MySslConfiguration instance = new MySslConfiguration();
 
