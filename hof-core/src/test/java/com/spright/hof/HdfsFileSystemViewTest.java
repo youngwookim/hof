@@ -29,6 +29,7 @@ public class HdfsFileSystemViewTest {
 
   private static User USER;
   private static HdfsUser HDFSUSER;
+  private final static String DEFAULT_SUPERUSER = "superuser";
   private final static String DEFAULT_NAME = "user";
   private final static String DEFAULT_PASSWORD = "pwd";
   private final static Authority[] DEFAULT_AUTHORITIES = null;
@@ -54,12 +55,12 @@ public class HdfsFileSystemViewTest {
 
     LOG.info("Create MiniDFSCluster.");
     CONF = new HdfsConfiguration();
-    MiniDFSCluster cluster = new MiniDFSCluster.Builder(CONF).build();
-    DFS = cluster.getFileSystem();
+    CLUSTER = new MiniDFSCluster.Builder(CONF).build();
+    HdfsOverFtpSystem.setSuperuser(DEFAULT_SUPERUSER);
+    HdfsOverFtpSystem.setHDFS_URI(CLUSTER.getURI().toString());
+    DFS = HdfsOverFtpSystem.getDfs();
     DFS.create(new Path(DEFAULT_FILE_PATH));
     DFS.setPermission(new Path(DEFAULT_FILE_PATH), DEFAULT_PERMISSION);
-    //expect HdfsOverFtpSystem.getDfs() will return DFS.
-    HdfsOverFtpSystem.setDfs(DFS);
   }
 
   @AfterClass
