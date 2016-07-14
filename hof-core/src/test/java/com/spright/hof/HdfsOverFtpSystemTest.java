@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HdfsOverFtpSystemTest {
+
   private static final Logger LOG = LoggerFactory.getLogger(HdfsOverFtpSystemTest.class);
   private static MiniDFSCluster CLUSTER;
   private static Configuration CONF;
@@ -71,19 +72,19 @@ public class HdfsOverFtpSystemTest {
     dfs1.delete(path, false);
 
     DistributedFileSystem dfs2 = HdfsOverFtpSystem.getDfs();
-    assertEquals(dfs1,dfs2);
+    assertEquals(dfs1, dfs2);
   }
 
   /**
    * Test of setHDFS_URI method, of class HdfsOverFtpSystem.
    */
   @Test
-  public void testSetHDFS_URI(){
+  public void testSetHDFS_URI() {
     LOG.info("Start testSetHDFS_URI");
     String sourceURI = HdfsOverFtpSystem.HDFS_URI;
     HdfsOverFtpSystem.setHDFS_URI("URI");
     String resultURI = HdfsOverFtpSystem.HDFS_URI;
     HdfsOverFtpSystem.setHDFS_URI(sourceURI);
-    assertEquals("URI",resultURI);
+    assertEquals("URI", resultURI);
   }
 }
