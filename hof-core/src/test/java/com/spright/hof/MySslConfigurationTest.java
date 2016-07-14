@@ -54,234 +54,234 @@ public class MySslConfigurationTest {
   private static SSLContext CTX;
   private static KeyManager[] KEYMANAGERS;
 
-    @BeforeClass
-    public static void setUpClass() throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyManagementException {
+  @BeforeClass
+  public static void setUpClass() throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyManagementException {
 
-      KEYSTOREPASS = DEFAULT_KEYSTOREPASS.toCharArray();
-      KS = KeyStore.getInstance(DEFAULT_KEYSTORETYPE);
-      KS.load(null,KEYSTOREPASS);
+    KEYSTOREPASS = DEFAULT_KEYSTOREPASS.toCharArray();
+    KS = KeyStore.getInstance(DEFAULT_KEYSTORETYPE);
+    KS.load(null,KEYSTOREPASS);
 
-      KMF = KeyManagerFactory.getInstance(DEFAULT_KEYSTOREALGORITHM);
-      KMF.init(KS, KEYSTOREPASS);
+    KMF = KeyManagerFactory.getInstance(DEFAULT_KEYSTOREALGORITHM);
+    KMF.init(KS, KEYSTOREPASS);
 
-      TRUSTKEYSTOREPASS = DEFAULT_TRUSTSTOREPASS.toCharArray();
-      TS=KS;
+    TRUSTKEYSTOREPASS = DEFAULT_TRUSTSTOREPASS.toCharArray();
+    TS=KS;
 
-      TMF = TrustManagerFactory.getInstance(DEFAULT_TRUSTSTOREALGORITHM);
-      TMF.init(TS);
+    TMF = TrustManagerFactory.getInstance(DEFAULT_TRUSTSTOREALGORITHM);
+    TMF.init(TS);
 
-      KEYMANAGERS = KMF.getKeyManagers();
-      if (ClassUtils.extendsClass(KEYMANAGERS[0].getClass(),"javax.net.ssl.X509ExtendedKeyManager")) {
-        KEYMANAGERS[0] = new ExtendedAliasKeyManager(KEYMANAGERS[0], DEFAULT_KEYALIAS);
-      }
-      CTX = SSLContext.getInstance(DEFAULT_PROTOCOL);
-      CTX.init(KEYMANAGERS, TMF.getTrustManagers(), null);
+    KEYMANAGERS = KMF.getKeyManagers();
+    if (ClassUtils.extendsClass(KEYMANAGERS[0].getClass(),"javax.net.ssl.X509ExtendedKeyManager")) {
+      KEYMANAGERS[0] = new ExtendedAliasKeyManager(KEYMANAGERS[0], DEFAULT_KEYALIAS);
     }
+    CTX = SSLContext.getInstance(DEFAULT_PROTOCOL);
+    CTX.init(KEYMANAGERS, TMF.getTrustManagers(), null);
+  }
 
-    @AfterClass
-    public static void tearDownClass() {
+  @AfterClass
+  public static void tearDownClass() {
 
-    }
-    @Before
-    public void setUp() {
-    }
+  }
 
-    @After
-    public void tearDown() {
-    }
+  @Before
+  public void setUp() {
+  }
 
-    /**
-     * Test of setKeystoreFile method and getKeystoreFile method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetKeystoreFile() {
-        LOG.info("Start testSetAndGetKeystoreFile");
-        MySslConfiguration instance = new MySslConfiguration();
-        File expResult = new File("test.txt");
-        instance.setKeystoreFile(expResult);
-        assertEquals(expResult, instance.getKeystoreFile());
-    }
+  @After
+  public void tearDown() {
+  }
 
-    /**
-     * Test of setKeystorePassword method and getKeystorePassword method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetKeystorePassword() {
-        LOG.info("Start testSetAndGetKeystorePassword");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "123";
-        instance.setKeystorePassword(expResult);
-        assertEquals(expResult, instance.getKeystorePassword());
-    }
+  /**
+   * Test of setKeystoreFile method and getKeystoreFile method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetKeystoreFile() {
+    LOG.info("Start testSetAndGetKeystoreFile");
+    MySslConfiguration instance = new MySslConfiguration();
+    File expResult = new File("test.txt");
+    instance.setKeystoreFile(expResult);
+    assertEquals(expResult, instance.getKeystoreFile());
+  }
 
-    /**
-     * Test of setKeystoreType method and getKeystoreType method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetKeystoreType() {
-        LOG.info("Start testSetAndGetKeystoreType");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "txt";
-        instance.setKeystoreType(expResult);
-        assertEquals(expResult, instance.getKeystoreType());
-    }
+  /**
+   * Test of setKeystorePassword method and getKeystorePassword method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetKeystorePassword() {
+    LOG.info("Start testSetAndGetKeystorePassword");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "123";
+    instance.setKeystorePassword(expResult);
+    assertEquals(expResult, instance.getKeystorePassword());
+  }
 
-    /**
-     * Test of setKeystoreAlgorithm method and getKeystoreAlgorithm method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetKeystoreAlgorithm() {
-        LOG.info("Start testSetAndGetKeystoreAlgorithm");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "ibmX509";
-        instance.setKeystoreAlgorithm(expResult);
-        assertEquals(expResult, instance.getKeystoreAlgorithm());
-    }
+  /**
+   * Test of setKeystoreType method and getKeystoreType method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetKeystoreType() {
+    LOG.info("Start testSetAndGetKeystoreType");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "txt";
+    instance.setKeystoreType(expResult);
+    assertEquals(expResult, instance.getKeystoreType());
+  }
 
-    /**
-     * Test of setSslProtocol method and getSslProtocol method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetSslProtocol() {
-        LOG.info("Start testSetAndGetSslProtocol");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "SSL";
-        instance.setSslProtocol(expResult);
-        assertEquals(expResult, instance.getSslProtocol());
-    }
+  /**
+   * Test of setKeystoreAlgorithm method and getKeystoreAlgorithm method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetKeystoreAlgorithm() {
+    LOG.info("Start testSetAndGetKeystoreAlgorithm");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "ibmX509";
+    instance.setKeystoreAlgorithm(expResult);
+    assertEquals(expResult, instance.getKeystoreAlgorithm());
+  }
 
-    /**
-     * Test of SetClientAuthentication method and getClientAuth method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetClientAuthentication() {
-        LOG.info("Start testSetAndGetClientAuthentication");
-        MySslConfiguration instance = new MySslConfiguration();
-        String clientAuthReqdString = "true";
-        instance.setClientAuthentication(clientAuthReqdString);
-        assertEquals(ClientAuth.NEED,instance.getClientAuth());
-        clientAuthReqdString = "WaNt";
-        instance.setClientAuthentication(clientAuthReqdString);
-        assertEquals(ClientAuth.WANT,instance.getClientAuth());
-        clientAuthReqdString = "qwer";
-        instance.setClientAuthentication(clientAuthReqdString);
-        assertEquals(ClientAuth.NONE,instance.getClientAuth());
-    }
+  /**
+   * Test of setSslProtocol method and getSslProtocol method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetSslProtocol() {
+    LOG.info("Start testSetAndGetSslProtocol");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "SSL";
+    instance.setSslProtocol(expResult);
+    assertEquals(expResult, instance.getSslProtocol());
+  }
 
-    /**
-     * Test of setKeyPassword method and getKeyPassword method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetKeyPassword() {
-        LOG.info("Start testSetAndGetKeyPassword");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "456";
-        instance.setKeyPassword(expResult);
-        assertEquals(expResult, instance.getKeyPassword());
-    }
+  /**
+   * Test of SetClientAuthentication method and getClientAuth method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetClientAuthentication() {
+    LOG.info("Start testSetAndGetClientAuthentication");
+    MySslConfiguration instance = new MySslConfiguration();
+    String clientAuthReqdString = "true";
+    instance.setClientAuthentication(clientAuthReqdString);
+    assertEquals(ClientAuth.NEED, instance.getClientAuth());
+    clientAuthReqdString = "WaNt";
+    instance.setClientAuthentication(clientAuthReqdString);
+    assertEquals(ClientAuth.WANT, instance.getClientAuth());
+    clientAuthReqdString = "qwer";
+    instance.setClientAuthentication(clientAuthReqdString);
+    assertEquals(ClientAuth.NONE, instance.getClientAuth());
+  }
 
-    /**
-     * Test of setTruststoreFile method and getTruststoreFile method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetTruststoreFile() {
-        LOG.info("Start testSetAndGetTruststoreFile");
-        MySslConfiguration instance = new MySslConfiguration();
-        File expResult = new File("TestTrustStore.txt");
-        instance.setTruststoreFile(expResult);
-        assertEquals(expResult, instance.getTruststoreFile());
-    }
+  /**
+   * Test of setKeyPassword method and getKeyPassword method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetKeyPassword() {
+    LOG.info("Start testSetAndGetKeyPassword");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "456";
+    instance.setKeyPassword(expResult);
+    assertEquals(expResult, instance.getKeyPassword());
+  }
 
-    /**
-     * Test of setTruststorePassword method and getTruststorePassword method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetTruststorePassword() {
-        LOG.info("Start testSetAndGetTruststorePassword");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "789";
-        instance.setTruststorePassword(expResult);
-        assertEquals(expResult, instance.getTruststorePassword());
-    }
+  /**
+   * Test of setTruststoreFile method and getTruststoreFile method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetTruststoreFile() {
+    LOG.info("Start testSetAndGetTruststoreFile");
+    MySslConfiguration instance = new MySslConfiguration();
+    File expResult = new File("TestTrustStore.txt");
+    instance.setTruststoreFile(expResult);
+    assertEquals(expResult, instance.getTruststoreFile());
+  }
 
-    /**
-     * Test of setTruststoreType method and getTruststoreType method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetTruststoreType() {
-        LOG.info("Start testSetAndGetTruststoreType");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = KeyStore.getDefaultType();
-        instance.setTruststoreType(expResult);
-        assertEquals(expResult, instance.getTruststoreType());
-    }
+  /**
+   * Test of setTruststorePassword method and getTruststorePassword method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetTruststorePassword() {
+    LOG.info("Start testSetAndGetTruststorePassword");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "789";
+    instance.setTruststorePassword(expResult);
+    assertEquals(expResult, instance.getTruststorePassword());
+  }
 
-    /**setSslProtocol
-     * Test of setTruststoreAlgorithm method and getTruststoreAlgorithm method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetTruststoreAlgorithm() {
-        LOG.info("Start testSetAndGetTruststoreAlgorithm");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "ibmX509";
-        instance.setTruststoreAlgorithm(expResult);
-        assertEquals(expResult, instance.getTruststoreAlgorithm());
-    }
+  /**
+   * Test of setTruststoreType method and getTruststoreType method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetTruststoreType() {
+    LOG.info("Start testSetAndGetTruststoreType");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = KeyStore.getDefaultType();
+    instance.setTruststoreType(expResult);
+    assertEquals(expResult, instance.getTruststoreType());
+  }
 
-    /**
-     * Test of setEnabledCipherSuites method and getEnabledCipherSuites method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetEnabledCipherSuites() {
-        LOG.info("Start testSetAndGetEnabledCipherSuites");
-        MySslConfiguration instance = new MySslConfiguration();
-        String[] expResult={"0","1","2"};
-        instance.setEnabledCipherSuites(expResult);
-        assertArrayEquals(expResult, instance.getEnabledCipherSuites());
-        expResult=null;
-        instance.setEnabledCipherSuites(expResult);
-        assertNull(instance.getEnabledCipherSuites());
-    }
+  /**setSslProtocol
+   * Test of setTruststoreAlgorithm method and getTruststoreAlgorithm method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetTruststoreAlgorithm() {
+    LOG.info("Start testSetAndGetTruststoreAlgorithm");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "ibmX509";
+    instance.setTruststoreAlgorithm(expResult);
+    assertEquals(expResult, instance.getTruststoreAlgorithm());
+  }
 
-    /**
-     * Test of setKeyAlias method and getKeyAlias method, of class MySslConfiguration.
-     */
-    @Test
-    public void testSetAndGetKeyAlias() {
-        LOG.info("Start testSetAndGetKeyAlias");
-        MySslConfiguration instance = new MySslConfiguration();
-        String expResult = "testkeyalias";
-        instance.setKeyAlias(expResult);
-        assertEquals(expResult, instance.getKeyAlias());
-    }
+  /**
+   * Test of setEnabledCipherSuites method and getEnabledCipherSuites method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetEnabledCipherSuites() {
+    LOG.info("Start testSetAndGetEnabledCipherSuites");
+    MySslConfiguration instance = new MySslConfiguration();
+    String[] expResult={"0","1","2"};
+    instance.setEnabledCipherSuites(expResult);
+    assertArrayEquals(expResult, instance.getEnabledCipherSuites());
+    expResult=null;
+    instance.setEnabledCipherSuites(expResult);
+    assertNull(instance.getEnabledCipherSuites());
+  }
 
-    /**
-     * Test of getSSLContext method, of class MySslConfiguration.
-     */
-    @Test
-    public void testInitAndGetSSLContext() throws GeneralSecurityException {
-      LOG.info("Start testInitAndGetSSLContext");
+  /**
+   * Test of setKeyAlias method and getKeyAlias method, of class MySslConfiguration.
+   */
+  @Test
+  public void testSetAndGetKeyAlias() {
+    LOG.info("Start testSetAndGetKeyAlias");
+    MySslConfiguration instance = new MySslConfiguration();
+    String expResult = "testkeyalias";
+    instance.setKeyAlias(expResult);
+    assertEquals(expResult, instance.getKeyAlias());
+  }
 
-      MySslConfiguration instance = new MySslConfiguration();
+  /**
+   * Test of getSSLContext method, of class MySslConfiguration.
+   */
+  @Test
+  public void testInitAndGetSSLContext() throws GeneralSecurityException {
+    LOG.info("Start testInitAndGetSSLContext");
+    MySslConfiguration instance = new MySslConfiguration();
 
-      instance.setKeystoreFile(DEFAULT_KEYSTOREFILE);
-      instance.setKeystoreType(DEFAULT_KEYSTORETYPE);
-      instance.setKeystorePassword(DEFAULT_KEYSTOREPASS);
-      instance.setKeystoreAlgorithm(DEFAULT_KEYSTOREALGORITHM);
+    instance.setKeystoreFile(DEFAULT_KEYSTOREFILE);
+    instance.setKeystoreType(DEFAULT_KEYSTORETYPE);
+    instance.setKeystorePassword(DEFAULT_KEYSTOREPASS);
+    instance.setKeystoreAlgorithm(DEFAULT_KEYSTOREALGORITHM);
 
-      instance.setTruststoreFile(DEFAULT_TRUSTSTOREFILE);
-      instance.setTruststoreType(DEFAULT_TRUSTSTORETYPE);
-      instance.setTruststorePassword(DEFAULT_TRUSTSTOREPASS);
-      instance.setTruststoreAlgorithm(DEFAULT_TRUSTSTOREALGORITHM);
+    instance.setTruststoreFile(DEFAULT_TRUSTSTOREFILE);
+    instance.setTruststoreType(DEFAULT_TRUSTSTORETYPE);
+    instance.setTruststorePassword(DEFAULT_TRUSTSTOREPASS);
+    instance.setTruststoreAlgorithm(DEFAULT_TRUSTSTOREALGORITHM);
 
-      instance.init();
+    instance.init();
 
-      instance.setSslProtocol(DEFAULT_PROTOCOL);
-      instance.setKeyAlias(DEFAULT_KEYALIAS);
+    instance.setSslProtocol(DEFAULT_PROTOCOL);
+    instance.setKeyAlias(DEFAULT_KEYALIAS);
 
-      SSLContext result = instance.getSSLContext(null);
-      assertEquals(CTX.getProtocol(),result.getProtocol() );
-      assertEquals(instance.getSSLContext(),result);
-    }
+    SSLContext result = instance.getSSLContext(null);
+    assertEquals(CTX.getProtocol(), result.getProtocol());
+    assertEquals(instance.getSSLContext(), result);
+  }
 
 }
