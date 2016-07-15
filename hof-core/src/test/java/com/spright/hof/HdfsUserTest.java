@@ -20,12 +20,12 @@ public class HdfsUserTest {
   private static User USER;
   private static HdfsUser HDFSUSER;
 
-  private final static String DEFAULT_USERNAME = "user";
-  private final static String DEFAULT_PASSWORD = "pwd";
-  private final static Authority[] DEFAULT_AUTHORITIES = null;
-  private final static int DEFAULT_MAXIDLETIME = 123;
-  private final static String DEFAULT_HOME = "/home";
-  private final static boolean DEFAULT_ENABLE = false;
+  private static final String DEFAULT_USERNAME = "user";
+  private static final String DEFAULT_PASSWORD = "pwd";
+  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final int DEFAULT_MAXIDLETIME = 123;
+  private static final String DEFAULT_HOME = "/home";
+  private static final boolean DEFAULT_ENABLE = false;
 
   @BeforeClass
   public static void setUpClass() {

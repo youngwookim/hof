@@ -29,17 +29,17 @@ public class HdfsFileSystemViewTest {
 
   private static User USER;
   private static HdfsUser HDFSUSER;
-  private final static String DEFAULT_SUPERUSER = "superuser";
-  private final static String DEFAULT_NAME = "user";
-  private final static String DEFAULT_PASSWORD = "pwd";
-  private final static Authority[] DEFAULT_AUTHORITIES = null;
-  private final static int DEFAULT_MAXIDLETIME = 123;
-  private final static String DEFAULT_HOME = "/home";
-  private final static boolean DEFAULT_ENABLE = false;
+  private static final String DEFAULT_SUPERUSER = "superuser";
+  private static final String DEFAULT_NAME = "user";
+  private static final String DEFAULT_PASSWORD = "pwd";
+  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final int DEFAULT_MAXIDLETIME = 123;
+  private static final String DEFAULT_HOME = "/home";
+  private static final boolean DEFAULT_ENABLE = false;
 
-  private final static String DEFAULT_FILE_PATH = "/home/file.txt";
-  private final static String DEFAULT_DIR_PATH = "/home";
-  private final static FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
+  private static final String DEFAULT_FILE_PATH = "/home/file.txt";
+  private static final String DEFAULT_DIR_PATH = "/home";
+  private static final FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
 
   @BeforeClass
   public static void setUpClass() throws IOException {

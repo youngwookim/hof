@@ -24,8 +24,8 @@ public class HdfsOverFtpSystemTest {
   private static Configuration CONF;
   private static URI HDFS_URI;
 
-  private final static String DEFAULT_FILE_PATH = "/home/file.txt";
-  private final static FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
+  private static final String DEFAULT_FILE_PATH = "/home/file.txt";
+  private static final FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
 
   @BeforeClass
   public static void setUpClass() throws IOException {
