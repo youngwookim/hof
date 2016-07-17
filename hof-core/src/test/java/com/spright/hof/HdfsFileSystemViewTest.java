@@ -18,33 +18,32 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HdfsFileSystemViewTest {
-
+  private static final Logger LOG = LoggerFactory.getLogger(HdfsFileSystemViewTest.class);
   private static MiniDFSCluster CLUSTER;
   private static Configuration CONF;
   private static DistributedFileSystem DFS;
 
   private static User USER;
   private static HdfsUser HDFSUSER;
-  private final static String DEFAULT_NAME = "user";
-  private final static String DEFAULT_PASSWORD = "pwd";
-  private final static Authority[] DEFAULT_AUTHORITIES = null;
-  private final static int DEFAULT_MAXIDLETIME = 123;
-  private final static String DEFAULT_HOME = "/home";
-  private final static boolean DEFAULT_ENABLE = false;
+  private static final String DEFAULT_SUPERUSER = "superuser";
+  private static final String DEFAULT_NAME = "user";
+  private static final String DEFAULT_PASSWORD = "pwd";
+  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final int DEFAULT_MAXIDLETIME = 123;
+  private static final String DEFAULT_HOME = "/home";
+  private static final boolean DEFAULT_ENABLE = false;
 
-  private final static String DEFAULT_FILE_PATH = "/home/file.txt";
-  private final static String DEFAULT_DIR_PATH = "/home";
-  private final static FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
-
-  public HdfsFileSystemViewTest() {
-  }
+  private static final String DEFAULT_FILE_PATH = "/home/file.txt";
+  private static final String DEFAULT_DIR_PATH = "/home";
+  private static final FsPermission DEFAULT_PERMISSION = new FsPermission((short) 1023);
 
   @BeforeClass
   public static void setUpClass() throws IOException {
-    System.out.println("setUpClass");
-
+    LOG.info("Start test HdfsFileSystemView.java");
     USER = Mockito.mock(User.class);
     Mockito.when(USER.getName()).thenReturn(DEFAULT_NAME);
     Mockito.when(USER.getPassword()).thenReturn(DEFAULT_PASSWORD);
@@ -54,20 +53,20 @@ public class HdfsFileSystemViewTest {
     Mockito.when(USER.getEnabled()).thenReturn(DEFAULT_ENABLE);
     HDFSUSER = new HdfsUser(USER);
 
-    System.out.println("Starte Create MiniDFSCluster");
+    LOG.info("Create MiniDFSCluster.");
     CONF = new HdfsConfiguration();
-    MiniDFSCluster cluster = new MiniDFSCluster.Builder(CONF).build();
-    DFS = cluster.getFileSystem();
+    CLUSTER = new MiniDFSCluster.Builder(CONF).build();
+    HdfsOverFtpSystem.setSuperuser(DEFAULT_SUPERUSER);
+    HdfsOverFtpSystem.setHDFS_URI(CLUSTER.getURI().toString());
+    DFS = HdfsOverFtpSystem.getDfs();
     DFS.create(new Path(DEFAULT_FILE_PATH));
     DFS.setPermission(new Path(DEFAULT_FILE_PATH), DEFAULT_PERMISSION);
-    //expect HdfsOverFtpSystem.getDfs() will return DFS.
-    HdfsOverFtpSystem.setDfs(DFS);
   }
 
   @AfterClass
   public static void tearDownClass() throws IOException {
-    System.out.println("tearDownClass");
     if (CLUSTER != null) {
+      LOG.info("Closing MiniDFSCluster");
       CLUSTER.shutdown();
       CLUSTER = null;
     }
@@ -87,7 +86,7 @@ public class HdfsFileSystemViewTest {
    */
   @Test
   public void testGetHomeDirectory() throws FtpException {
-    System.out.println("getHomeDirectory");
+    LOG.info("Start testGetHomeDirectory");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
     FileObject result = instance.getHomeDirectory();
 
@@ -101,7 +100,7 @@ public class HdfsFileSystemViewTest {
    */
   @Test
   public void testGetFileObject() throws FtpException {
-    System.out.println("getFileObject");
+    LOG.info("Start testGetFileObject");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
 
     FileObject result = instance.getFileObject(DEFAULT_FILE_PATH);
@@ -114,7 +113,7 @@ public class HdfsFileSystemViewTest {
    */
   @Test
   public void testChangeANDGetCurrnentDirectory() throws FtpException {
-    System.out.println("changeDirectory");
+    LOG.info("Start testChangeANDGetCurrnentDirectory");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
     assertEquals("/", instance.getCurrentDirectory().getFullName());
     instance.changeDirectory(DEFAULT_DIR_PATH);
@@ -127,7 +126,7 @@ public class HdfsFileSystemViewTest {
    */
   @Test
   public void testIsRandomAccessible() throws FtpException {
-    System.out.println("changeDirectory");
+    LOG.info("Start testIsRandomAccessible");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
     assertTrue(instance.isRandomAccessible());
   }
