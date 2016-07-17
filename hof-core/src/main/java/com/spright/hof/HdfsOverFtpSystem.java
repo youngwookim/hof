@@ -52,6 +52,15 @@ public class HdfsOverFtpSystem {
   }
 
   /**
+   * Set dfs
+   *
+   * @param sourceDFS
+   */
+  public static void setDfs(DistributedFileSystem dfs) throws IOException {
+    HdfsOverFtpSystem.dfs = dfs;
+  }
+
+  /**
    * Set superuser. and we connect to DFS as a superuser
    *
    * @param superuser
