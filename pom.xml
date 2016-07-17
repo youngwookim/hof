@@ -29,7 +29,6 @@
     <ftpserver.version>1.0.0-M3</ftpserver.version>
     <mina.version>2.0.1</mina.version>
     <mockito-all.version>1.10.19</mockito-all.version>
-	<powermock.version>1.6.5</powermock.version>
   </properties>
 
   <repositories>
@@ -89,18 +88,6 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>
-	  <dependency>
-		<groupId>org.powermock</groupId>
-		<artifactId>powermock-module-junit4</artifactId>
-		<version>${powermock.version}</version>
-		<scope>test</scope>
-	  </dependency>
-      <dependency>
-        <groupId>org.powermock</groupId>
-        <artifactId>powermock-api-mockito</artifactId>
-        <version>${powermock.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
