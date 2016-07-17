@@ -8,3 +8,4 @@ Release 0.1.1 - unrelased
       HOF-0007 Add Test for HdfsUser
       HOF-0004 Add Test for HdfsFileSystemView
       HOF-0006 Add Test for HdfsOverFtpSystem
+	  HOF-0002 Add Test for HdfsFileObject
