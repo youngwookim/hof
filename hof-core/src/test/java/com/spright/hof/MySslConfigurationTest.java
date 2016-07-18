@@ -56,20 +56,15 @@ public class MySslConfigurationTest {
 
   @BeforeClass
   public static void setUpClass() throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyManagementException {
-
     KEYSTOREPASS = DEFAULT_KEYSTOREPASS.toCharArray();
     KS = KeyStore.getInstance(DEFAULT_KEYSTORETYPE);
     KS.load(null,KEYSTOREPASS);
-
     KMF = KeyManagerFactory.getInstance(DEFAULT_KEYSTOREALGORITHM);
     KMF.init(KS, KEYSTOREPASS);
-
     TRUSTKEYSTOREPASS = DEFAULT_TRUSTSTOREPASS.toCharArray();
-    TS=KS;
-
+    TS = KS;
     TMF = TrustManagerFactory.getInstance(DEFAULT_TRUSTSTOREALGORITHM);
     TMF.init(TS);
-
     KEYMANAGERS = KMF.getKeyManagers();
     if (ClassUtils.extendsClass(KEYMANAGERS[0].getClass(),"javax.net.ssl.X509ExtendedKeyManager")) {
       KEYMANAGERS[0] = new ExtendedAliasKeyManager(KEYMANAGERS[0], DEFAULT_KEYALIAS);
@@ -80,7 +75,6 @@ public class MySslConfigurationTest {
 
   @AfterClass
   public static void tearDownClass() {
-
   }
 
   @Before
@@ -239,7 +233,7 @@ public class MySslConfigurationTest {
     String[] expResult={"0","1","2"};
     instance.setEnabledCipherSuites(expResult);
     assertArrayEquals(expResult, instance.getEnabledCipherSuites());
-    expResult=null;
+    expResult = null;
     instance.setEnabledCipherSuites(expResult);
     assertNull(instance.getEnabledCipherSuites());
   }
@@ -263,22 +257,17 @@ public class MySslConfigurationTest {
   public void testInitAndGetSSLContext() throws GeneralSecurityException {
     LOG.info("Start testInitAndGetSSLContext");
     MySslConfiguration instance = new MySslConfiguration();
-
     instance.setKeystoreFile(DEFAULT_KEYSTOREFILE);
     instance.setKeystoreType(DEFAULT_KEYSTORETYPE);
     instance.setKeystorePassword(DEFAULT_KEYSTOREPASS);
     instance.setKeystoreAlgorithm(DEFAULT_KEYSTOREALGORITHM);
-
     instance.setTruststoreFile(DEFAULT_TRUSTSTOREFILE);
     instance.setTruststoreType(DEFAULT_TRUSTSTORETYPE);
     instance.setTruststorePassword(DEFAULT_TRUSTSTOREPASS);
     instance.setTruststoreAlgorithm(DEFAULT_TRUSTSTOREALGORITHM);
-
     instance.init();
-
     instance.setSslProtocol(DEFAULT_PROTOCOL);
     instance.setKeyAlias(DEFAULT_KEYALIAS);
-
     SSLContext result = instance.getSSLContext(null);
     assertEquals(CTX.getProtocol(), result.getProtocol());
     assertEquals(instance.getSSLContext(), result);

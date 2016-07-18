@@ -58,7 +58,7 @@ public class MySslConfiguration implements SslConfiguration {
   private HashMap<String, SSLContext> sslContextMap = new HashMap<String, SSLContext>();
 
   private String[] enabledCipherSuites;
-  
+
   private static final String DEFAULT_KEYPASSWORD = "333333";
 
   /**
