@@ -29,18 +29,18 @@ import org.slf4j.LoggerFactory;
 public class MySslConfigurationTest {
   private static final Logger LOG = LoggerFactory.getLogger(MySslConfigurationTest.class);
 
-  private final static String DEFAULT_KEYSTOREPASS = "333333";
-  private final static File DEFAULT_KEYSTOREFILE = null;
-  private final static String DEFAULT_KEYSTORETYPE = KeyStore.getDefaultType();
-  private final static String DEFAULT_KEYSTOREALGORITHM = "SunX509";
+  private static final String DEFAULT_KEYSTOREPASS = "333333";
+  private static final File DEFAULT_KEYSTOREFILE = null;
+  private static final String DEFAULT_KEYSTORETYPE = KeyStore.getDefaultType();
+  private static final String DEFAULT_KEYSTOREALGORITHM = "SunX509";
 
-  private final static String DEFAULT_TRUSTSTOREPASS = "333333";
-  private final static File DEFAULT_TRUSTSTOREFILE = null;
-  private final static String DEFAULT_TRUSTSTORETYPE = KeyStore.getDefaultType();
-  private final static String DEFAULT_TRUSTSTOREALGORITHM = "SunX509";
+  private static final String DEFAULT_TRUSTSTOREPASS = "333333";
+  private static final File DEFAULT_TRUSTSTOREFILE = null;
+  private static final String DEFAULT_TRUSTSTORETYPE = KeyStore.getDefaultType();
+  private static final String DEFAULT_TRUSTSTOREALGORITHM = "SunX509";
 
-  private final static String DEFAULT_PROTOCOL = "TLS";
-  private final static String DEFAULT_KEYALIAS = "testkeyalias";
+  private static final String DEFAULT_PROTOCOL = "TLS";
+  private static final String DEFAULT_KEYALIAS = "testkeyalias";
 
   private static char [] KEYSTOREPASS;
   private static KeyStore KS;

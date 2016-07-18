@@ -58,6 +58,8 @@ public class MySslConfiguration implements SslConfiguration {
   private HashMap<String, SSLContext> sslContextMap = new HashMap<String, SSLContext>();
 
   private String[] enabledCipherSuites;
+  
+  private static final String DEFAULT_KEYPASSWORD = "333333";
 
   /**
    * The key store file used by this configuration
@@ -262,17 +264,13 @@ public class MySslConfiguration implements SslConfiguration {
     KeyStore store = KeyStore.getInstance(storeType);
     //For test : set storeFile=null
     if(storeFile == null) {
-      store.load(null, "333333".toCharArray());
+      store.load(null, DEFAULT_KEYPASSWORD.toCharArray());
       return store;
     }
     else {
-      FileInputStream fin = null;
-      try {
-        fin = new FileInputStream(storeFile);
-        store.load(fin, "333333".toCharArray());
+      try (FileInputStream fin = new FileInputStream(storeFile)) {
+        store.load(fin, DEFAULT_KEYPASSWORD.toCharArray());
         return store;
-      } finally {
-        IoUtils.close(fin);
       }
     }
 
