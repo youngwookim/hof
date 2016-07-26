@@ -12,24 +12,24 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HdfsUserTest {
-
+  private static final Logger LOG = LoggerFactory.getLogger(HdfsUserTest.class);
   private static User USER;
   private static HdfsUser HDFSUSER;
 
-  private final static String DEFAULT_USERNAME = "user";
-  private final static String DEFAULT_PASSWORD = "pwd";
-  private final static Authority[] DEFAULT_AUTHORITIES = null;
-  private final static int DEFAULT_MAXIDLETIME = 123;
-  private final static String DEFAULT_HOME = "/home";
-  private final static boolean DEFAULT_ENABLE = false;
-
-  public HdfsUserTest() {
-  }
+  private static final String DEFAULT_USERNAME = "user";
+  private static final String DEFAULT_PASSWORD = "pwd";
+  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final int DEFAULT_MAXIDLETIME = 123;
+  private static final String DEFAULT_HOME = "/home";
+  private static final boolean DEFAULT_ENABLE = false;
 
   @BeforeClass
   public static void setUpClass() {
+    LOG.info("Start test HdfsUser.java");
     USER = Mockito.mock(User.class);
     Mockito.when(USER.getName()).thenReturn(DEFAULT_USERNAME);
     Mockito.when(USER.getPassword()).thenReturn(DEFAULT_PASSWORD);
@@ -58,7 +58,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testGetMainGroup() {
-    System.out.println("getMainGroup");
+    LOG.info("Start testGetMainGroup");
     HdfsUser instance = new HdfsUser(USER);
     ArrayList<String> groups = new ArrayList<String>();
     groups.add("g1");
@@ -73,7 +73,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testIsGroupMember() {
-    System.out.println("isGroupMember");
+    LOG.info("Start testIsGroupMember");
     HdfsUser instance = new HdfsUser(USER);
     ArrayList<String> groups = new ArrayList<String>();
     groups.add("g1");
@@ -89,7 +89,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndGetGroups() {
-    System.out.println("SetAndGetGroups");
+    LOG.info("Start testSetAndGetGroups");
     HdfsUser instance = new HdfsUser(USER);
     ArrayList<String> groups = new ArrayList<String>();
     groups.add("g1");
@@ -103,7 +103,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndGetName() {
-    System.out.println("SetAndGetName");
+    LOG.info("Start testSetAndGetName");
     String name = "";
     HdfsUser instance = new HdfsUser(USER);
     instance.setName("userTest");
@@ -116,7 +116,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndGetPassword() {
-    System.out.println("setPassword");
+    LOG.info("Start testSetAndGetPassword");
     HdfsUser instance = new HdfsUser(USER);
     instance.setPassword("passwordTest");
 
@@ -128,7 +128,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndgetAuthorities() {
-    System.out.println("testSetAndgetAuthorities");
+    LOG.info("Start testSetAndgetAuthorities");
     Authority[] authorities = new Authority[0];
     HdfsUser instance = new HdfsUser(USER);
 
@@ -144,7 +144,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndGetMaxIdleTime() {
-    System.out.println("testSetAndGetMaxIdleTime");
+    LOG.info("Start testSetAndGetMaxIdleTime");
     HdfsUser instance = new HdfsUser(USER);
     instance.setMaxIdleTime(5566);
     assertEquals(5566, instance.getMaxIdleTime());
@@ -158,7 +158,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndGetEnabled() {
-    System.out.println("testSetAndGetEnabled");
+    LOG.info("Start testSetAndGetEnabled");
     HdfsUser instance = new HdfsUser(USER);
     instance.setEnabled(false);
     assertFalse(instance.getEnabled());
@@ -172,7 +172,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testSetAndGetHomeDirectory() {
-    System.out.println("testSetAndGetHomeDirectory");
+    LOG.info("Start testSetAndGetHomeDirectory");
     HdfsUser instance = new HdfsUser(USER);
     instance.setHomeDirectory("/home/dir");
 
@@ -184,7 +184,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testToString() {
-    System.out.println("toString");
+    LOG.info("Start testToString");
     HdfsUser instance = new HdfsUser(USER);
 
     assertEquals(DEFAULT_USERNAME, instance.toString());
@@ -195,7 +195,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testAuthorize() {
-    System.out.println("authorize");
+    LOG.info("Start testAuthorize");
     AuthorizationRequest request = new WriteRequest();
     HdfsUser instance = new HdfsUser(USER);
 
@@ -215,7 +215,7 @@ public class HdfsUserTest {
    */
   @Test
   public void testGetAuthorities_Class() {
-    System.out.println("getAuthorities");
+    LOG.info("Start testGetAuthorities_Class");
     Authority authority1 = Mockito.mock(Authority.class);
     Authority authority2 = Mockito.mock(Authority.class);
     Authority[] authorities = {authority1, authority2};
