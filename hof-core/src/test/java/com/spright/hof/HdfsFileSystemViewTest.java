@@ -1,9 +1,10 @@
 package com.spright.hof;
 
 import java.io.IOException;
+import java.util.List;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.FileObject;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -22,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HdfsFileSystemViewTest {
+
   private static final Logger LOG = LoggerFactory.getLogger(HdfsFileSystemViewTest.class);
   private static MiniDFSCluster CLUSTER;
   private static Configuration CONF;
@@ -32,7 +34,7 @@ public class HdfsFileSystemViewTest {
   private static final String DEFAULT_SUPERUSER = "superuser";
   private static final String DEFAULT_NAME = "user";
   private static final String DEFAULT_PASSWORD = "pwd";
-  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final List<Authority> DEFAULT_AUTHORITIES = null;
   private static final int DEFAULT_MAXIDLETIME = 123;
   private static final String DEFAULT_HOME = "/home";
   private static final boolean DEFAULT_ENABLE = false;
@@ -88,10 +90,10 @@ public class HdfsFileSystemViewTest {
   public void testGetHomeDirectory() throws FtpException {
     LOG.info("Start testGetHomeDirectory");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
-    FileObject result = instance.getHomeDirectory();
+    FtpFile result = instance.getHomeDirectory();
 
     // "/" was written as hard code in getHomeDirectory()
-    assertEquals("/", result.getFullName());
+    assertEquals("/", result.getAbsolutePath());
     assertTrue(result.isDirectory());
   }
 
@@ -99,12 +101,12 @@ public class HdfsFileSystemViewTest {
    * Test of getFileObject method, of class HdfsFileSystemView.
    */
   @Test
-  public void testGetFileObject() throws FtpException {
+  public void testGetFile() throws FtpException {
     LOG.info("Start testGetFileObject");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
 
-    FileObject result = instance.getFileObject(DEFAULT_FILE_PATH);
-    assertEquals(DEFAULT_FILE_PATH, result.getFullName());
+    FtpFile result = instance.getFile(DEFAULT_FILE_PATH);
+    assertEquals(DEFAULT_FILE_PATH, result.getAbsolutePath());
   }
 
   /**
@@ -115,9 +117,9 @@ public class HdfsFileSystemViewTest {
   public void testChangeANDGetCurrnentDirectory() throws FtpException {
     LOG.info("Start testChangeANDGetCurrnentDirectory");
     HdfsFileSystemView instance = new HdfsFileSystemView(HDFSUSER, true);
-    assertEquals("/", instance.getCurrentDirectory().getFullName());
-    instance.changeDirectory(DEFAULT_DIR_PATH);
-    assertEquals(DEFAULT_DIR_PATH, instance.getCurrentDirectory().getFullName());
+    assertEquals(DEFAULT_HOME, instance.getWorkingDirectory().getAbsolutePath());
+    instance.changeWorkingDirectory(DEFAULT_DIR_PATH);
+    assertEquals(DEFAULT_DIR_PATH, instance.getWorkingDirectory().getAbsolutePath());
   }
 
   /**

@@ -1,9 +1,9 @@
 package com.spright.hof;
 
 import org.apache.ftpserver.FtpServerConfigurationException;
-import org.apache.ftpserver.ssl.AliasKeyManager;
+import org.apache.ftpserver.ssl.impl.AliasKeyManager;
 import org.apache.ftpserver.ssl.ClientAuth;
-import org.apache.ftpserver.ssl.ExtendedAliasKeyManager;
+import org.apache.ftpserver.ssl.impl.ExtendedAliasKeyManager;
 import org.apache.ftpserver.ssl.SslConfiguration;
 import org.apache.ftpserver.util.ClassUtils;
 import org.apache.ftpserver.util.IoUtils;
@@ -263,11 +263,10 @@ public class MySslConfiguration implements SslConfiguration {
           String storePass) throws IOException, GeneralSecurityException {
     KeyStore store = KeyStore.getInstance(storeType);
     //For test : set storeFile=null
-    if(storeFile == null) {
+    if (storeFile == null) {
       store.load(null, DEFAULT_KEYPASSWORD.toCharArray());
       return store;
-    }
-    else {
+    } else {
       try (FileInputStream fin = new FileInputStream(storeFile)) {
         store.load(fin, DEFAULT_KEYPASSWORD.toCharArray());
         return store;
@@ -284,7 +283,7 @@ public class MySslConfiguration implements SslConfiguration {
     try {
       // initialize keystore
       //For test : When keystoreFile is equal to null,skip log.debug()
-      if(keystoreFile != null) {
+      if (keystoreFile != null) {
         LOG.debug("Loading key store from \"{}\", using the key store type \"{}\"", keystoreFile.getAbsolutePath(), keystoreType);
       }
 

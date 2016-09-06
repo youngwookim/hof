@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystemException;
+import java.util.List;
 import org.apache.ftpserver.ftplet.Authority;
-import org.apache.ftpserver.ftplet.FileObject;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -30,7 +31,7 @@ public class HdfsFileObjectTest {
 
   private final static String DEFAULT_NAME = "user";
   private final static String DEFAULT_PASSWORD = "pwd";
-  private final static Authority[] DEFAULT_AUTHORITIES = null;
+  private final static List<Authority> DEFAULT_AUTHORITIES = null;
   private final static int DEFAULT_MAXIDLETIME = 123;
   private final static String DEFAULT_HOME = "/home";
   private final static boolean DEFAULT_ENABLE = false;
@@ -96,23 +97,23 @@ public class HdfsFileObjectTest {
    * Test of getFullName method, of class HdfsFileObject.
    */
   @Test
-  public void testGetFullName() {
+  public void testGetAbsolutePath() {
     System.out.println("Start testGetFullName");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_DIR_PATH, HDFSUSER);
-    assertEquals(DEFAULT_DIR_PATH, instance.getFullName());
+    assertEquals(DEFAULT_DIR_PATH, instance.getAbsolutePath());
   }
 
   /**
    * Test of getShortName method, of class HdfsFileObject.
    */
   @Test
-  public void testGetShortName() {
+  public void testGetName() {
     System.out.println("Start testGetShortName");
     HdfsFileObject instance = new HdfsFileObject("/", HDFSUSER);
-    assertEquals("/", instance.getShortName());
+    assertEquals("/", instance.getName());
 
     HdfsFileObject instance2 = new HdfsFileObject("123/test.txt", HDFSUSER);
-    assertEquals("test.txt", instance2.getShortName());
+    assertEquals("test.txt", instance2.getName());
   }
 
   /**
@@ -171,9 +172,9 @@ public class HdfsFileObjectTest {
   public void testHasReadPermission() throws IOException {
     System.out.println("Start testHasReadPermission");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_DIR_PATH, HDFSUSER);
-    assertTrue(instance.hasReadPermission());
+    assertTrue(instance.isReadable());
     HdfsFileObject instance2 = new HdfsFileObject("..", HDFSUSER);
-    assertFalse(instance2.hasReadPermission());
+    assertFalse(instance2.isReadable());
   }
 
   /**
@@ -183,9 +184,9 @@ public class HdfsFileObjectTest {
   public void testHasWritePermission() {
     System.out.println("Start testHasWritePermission");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
-    assertTrue(instance.hasWritePermission());
+    assertTrue(instance.isWritable());
     HdfsFileObject instance2 = new HdfsFileObject("/", HDFSUSER);
-    assertFalse(instance2.hasWritePermission());
+    assertFalse(instance2.isWritable());
   }
 
   /**
@@ -195,8 +196,8 @@ public class HdfsFileObjectTest {
   public void testHasDeletePermission() {
     System.out.println("Start testHasDeletePermissionn");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
-    boolean expResult = instance.hasWritePermission();
-    assertEquals(expResult, instance.hasDeletePermission());
+    boolean expResult = instance.isWritable();
+    assertEquals(expResult, instance.isRemovable());
   }
 
   /**
@@ -260,7 +261,7 @@ public class HdfsFileObjectTest {
    * Test of mkdir method and delete method, of class HdfsFileObject.
    */
   @Test
-  public void testMkdirAndDelete() throws FileSystemException, IOException{
+  public void testMkdirAndDelete() throws FileSystemException, IOException {
     System.out.println("Start testMkdirAndDelete");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_DIR_PATH, HDFSUSER);
     assertFalse(instance.mkdir());
@@ -273,7 +274,6 @@ public class HdfsFileObjectTest {
     assertFalse(instance2.doesExist());
   }
 
-
   /**
    * Test of move method, of class HdfsFileObject.
    */
@@ -282,11 +282,11 @@ public class HdfsFileObjectTest {
     System.out.println("Start testMove");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
     String testpath = "/testmove.txt";
-    FileObject fileObject = new HdfsFileObject(testpath, HDFSUSER);
+    FtpFile fileObject = new HdfsFileObject(testpath, HDFSUSER);
     assertTrue(instance.move(fileObject));
     assertFalse(instance.doesExist());
     HdfsFileObject instance2 = new HdfsFileObject(testpath, HDFSUSER);
-    FileObject fileObject2 = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
+    FtpFile fileObject2 = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
     instance2.move(fileObject2);
   }
 
@@ -299,12 +299,13 @@ public class HdfsFileObjectTest {
     HdfsFileObject instance = new HdfsFileObject("..", HDFSUSER);
     assertNull(instance.listFiles());
     HdfsFileObject instance2 = new HdfsFileObject(DEFAULT_DIR_PATH, HDFSUSER);
-    FileObject[] result = instance2.listFiles();
-    assertEquals("file.txt", result[0].getShortName());
+    List<FtpFile> result = instance2.listFiles();
+    assertEquals("file.txt", result.get(0).getName());
   }
 
   /**
-   * Test of createOutputStream and createInputStream method, of class HdfsFileObject.
+   * Test of createOutputStream and createInputStream method, of class
+   * HdfsFileObject.
    */
   @Test
   public void testCreateOutputStreamAndInputStream() throws Exception {

@@ -3,13 +3,14 @@ package com.spright.hof;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.usermanager.Md5PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PasswordEncryptor;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
-import org.apache.ftpserver.usermanager.WriteRequest;
+import org.apache.ftpserver.usermanager.impl.WriteRequest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,13 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HdfsUserManagerTest {
+
   private static final Logger LOG = LoggerFactory.getLogger(HdfsUserManagerTest.class);
   private static User USER1;
   private static User USER2;
   private static File TEMP_CONF_FILE;
+  private PasswordEncryptor PASSWORD_ENCRYPTOR = new Md5PasswordEncryptor();
+  String ADMIN_NAME = "amdin";
 
   private static final String DEFAULT_PASSWORD = "pwd";
-  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final List<Authority> DEFAULT_AUTHORITIES = null;
   private static final int DEFAULT_MAXIDLETIME = 123;
   private static final String DEFAULT_HOME = "/home";
   private static final boolean DEFAULT_ENABLE = false;
@@ -82,59 +86,13 @@ public class HdfsUserManagerTest {
   }
 
   /**
-   * Test of getFile、setFile method, of class HdfsUserManager.
-   */
-  @Test
-  public void testSetAndGetFile() {
-    LOG.info("Start testSetAndGetFile");
-    HdfsUserManager instance = new HdfsUserManager();
-    File expResult = new File("testFile");
-    instance.setFile(expResult);
-    File result = instance.getFile();
-
-    assertEquals(expResult, result);
-  }
-
-  /**
-   * Test of getPasswordEncryptor method, of class HdfsUserManager.
-   */
-  @Test
-  public void testSetAndGetPasswordEncryptor() {
-    LOG.info("Start testSetAndGetPasswordEncryptor");
-    HdfsUserManager instance = new HdfsUserManager();
-    PasswordEncryptor expResult = new Md5PasswordEncryptor();
-    instance.setPasswordEncryptor(expResult);
-    PasswordEncryptor result = instance.getPasswordEncryptor();
-
-    assertEquals(expResult, result);
-  }
-
-  /**
-   * Test of configure method, of class HdfsUserManager.
-   */
-  @Test
-  public void testConfigure() {
-    LOG.info("Start testConfigure");
-    HdfsUserManager instance = new HdfsUserManager();
-    instance.setFile(TEMP_CONF_FILE);
-    instance.configure();
-    User expUser = instance.getUserByName("confUsr");
-
-    assertTrue(instance.doesExist("confUsr"));
-    assertEquals(expUser.getName(), "confUsr");
-    assertNotNull(expUser.authorize(new WriteRequest()));
-    assertEquals(expUser.getMaxIdleTime(), 0);
-    assertEquals(expUser.getHomeDirectory(), "/");
-    assertTrue(expUser.getEnabled());
-  }
-
-  /**
    * Test of save method, of class HdfsUserManager.
    */
   @Test
   public void testSave() throws Exception {
     LOG.info("Start testSave");
-    HdfsUserManager instance = new HdfsUserManager();
+
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
     User expUser = instance.getUserByName("user1");
 
@@ -153,7 +111,7 @@ public class HdfsUserManagerTest {
   public void testDelete() throws Exception {
     LOG.info("Start testDelete");
     String usrName = "user1";
-    HdfsUserManager instance = new HdfsUserManager();
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
     instance.delete(usrName);
 
@@ -166,11 +124,11 @@ public class HdfsUserManagerTest {
   @Test
   public void testGetAllUserNames() throws FtpException {
     LOG.info("Start testGetAllUserNames");
-    HdfsUserManager instance = new HdfsUserManager();
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
     instance.save(USER2);
     String[] result = instance.getAllUserNames();
-    String[] expResult = {"user1", "user2"};
+    String[] expResult = {"confUsr", "user1", "user2"};
 
     assertArrayEquals(expResult, result);
   }
@@ -182,7 +140,7 @@ public class HdfsUserManagerTest {
   public void testGetUserByName() throws FtpException {
     LOG.info("Start testGetUserByName");
     String userName = "user1";
-    HdfsUserManager instance = new HdfsUserManager();
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
 
     User expUser = instance.getUserByName(userName);
@@ -201,7 +159,7 @@ public class HdfsUserManagerTest {
   public void testDoesExist() throws FtpException {
     LOG.info("Start testDoesExist");
     String name = "user1";
-    HdfsUserManager instance = new HdfsUserManager();
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
     boolean result = instance.doesExist(name);
 
@@ -215,7 +173,7 @@ public class HdfsUserManagerTest {
   public void testAuthenticate() throws Exception {
     LOG.info("Start testAuthenticate");
     UsernamePasswordAuthentication authentication = new UsernamePasswordAuthentication(USER1.getName(), USER1.getPassword());
-    HdfsUserManager instance = new HdfsUserManager();
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
     User expUser = instance.authenticate(authentication);
 
@@ -233,7 +191,7 @@ public class HdfsUserManagerTest {
   @Test(expected = NullPointerException.class)
   public void testDoesExistAfterDispose() throws FtpException {
     LOG.info("Start testDoesExistAfterDispose");
-    HdfsUserManager instance = new HdfsUserManager();
+    HdfsUserManager instance = new HdfsUserManager(PASSWORD_ENCRYPTOR, TEMP_CONF_FILE, ADMIN_NAME);
     instance.save(USER1);
 
     assertTrue(instance.doesExist("user1"));
