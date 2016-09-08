@@ -11,3 +11,4 @@ Release 0.1.1 - unrelased
       HOF-0002 Add Test for HdfsFileObject
       HOF-0005 Add Test for HdfsOverFtpServer
       HOF-0009 Add Test for MySslConfiguration
+      HOF-0010 Update Apache FtpServer dependency(1.0.0-M3 -> 1.0.6(latest))

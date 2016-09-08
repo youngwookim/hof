@@ -15,7 +15,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 import org.apache.ftpserver.ssl.ClientAuth;
-import org.apache.ftpserver.ssl.ExtendedAliasKeyManager;
+import org.apache.ftpserver.ssl.impl.ExtendedAliasKeyManager;
 import org.apache.ftpserver.util.ClassUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MySslConfigurationTest {
+
   private static final Logger LOG = LoggerFactory.getLogger(MySslConfigurationTest.class);
 
   private static final String DEFAULT_KEYSTOREPASS = "333333";
@@ -42,11 +43,11 @@ public class MySslConfigurationTest {
   private static final String DEFAULT_PROTOCOL = "TLS";
   private static final String DEFAULT_KEYALIAS = "testkeyalias";
 
-  private static char [] KEYSTOREPASS;
+  private static char[] KEYSTOREPASS;
   private static KeyStore KS;
   private static KeyManagerFactory KMF;
 
-  private static char [] TRUSTKEYSTOREPASS;
+  private static char[] TRUSTKEYSTOREPASS;
   private static KeyStore TS;
   private static TrustManagerFactory TMF;
 
@@ -58,7 +59,7 @@ public class MySslConfigurationTest {
   public static void setUpClass() throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyManagementException {
     KEYSTOREPASS = DEFAULT_KEYSTOREPASS.toCharArray();
     KS = KeyStore.getInstance(DEFAULT_KEYSTORETYPE);
-    KS.load(null,KEYSTOREPASS);
+    KS.load(null, KEYSTOREPASS);
     KMF = KeyManagerFactory.getInstance(DEFAULT_KEYSTOREALGORITHM);
     KMF.init(KS, KEYSTOREPASS);
     TRUSTKEYSTOREPASS = DEFAULT_TRUSTSTOREPASS.toCharArray();
@@ -66,7 +67,7 @@ public class MySslConfigurationTest {
     TMF = TrustManagerFactory.getInstance(DEFAULT_TRUSTSTOREALGORITHM);
     TMF.init(TS);
     KEYMANAGERS = KMF.getKeyManagers();
-    if (ClassUtils.extendsClass(KEYMANAGERS[0].getClass(),"javax.net.ssl.X509ExtendedKeyManager")) {
+    if (ClassUtils.extendsClass(KEYMANAGERS[0].getClass(), "javax.net.ssl.X509ExtendedKeyManager")) {
       KEYMANAGERS[0] = new ExtendedAliasKeyManager(KEYMANAGERS[0], DEFAULT_KEYALIAS);
     }
     CTX = SSLContext.getInstance(DEFAULT_PROTOCOL);
@@ -86,7 +87,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setKeystoreFile method and getKeystoreFile method, of class MySslConfiguration.
+   * Test of setKeystoreFile method and getKeystoreFile method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetKeystoreFile() {
@@ -98,7 +100,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setKeystorePassword method and getKeystorePassword method, of class MySslConfiguration.
+   * Test of setKeystorePassword method and getKeystorePassword method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetKeystorePassword() {
@@ -110,7 +113,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setKeystoreType method and getKeystoreType method, of class MySslConfiguration.
+   * Test of setKeystoreType method and getKeystoreType method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetKeystoreType() {
@@ -122,7 +126,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setKeystoreAlgorithm method and getKeystoreAlgorithm method, of class MySslConfiguration.
+   * Test of setKeystoreAlgorithm method and getKeystoreAlgorithm method, of
+   * class MySslConfiguration.
    */
   @Test
   public void testSetAndGetKeystoreAlgorithm() {
@@ -134,7 +139,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setSslProtocol method and getSslProtocol method, of class MySslConfiguration.
+   * Test of setSslProtocol method and getSslProtocol method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetSslProtocol() {
@@ -146,7 +152,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of SetClientAuthentication method and getClientAuth method, of class MySslConfiguration.
+   * Test of SetClientAuthentication method and getClientAuth method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetClientAuthentication() {
@@ -164,7 +171,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setKeyPassword method and getKeyPassword method, of class MySslConfiguration.
+   * Test of setKeyPassword method and getKeyPassword method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetKeyPassword() {
@@ -176,7 +184,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setTruststoreFile method and getTruststoreFile method, of class MySslConfiguration.
+   * Test of setTruststoreFile method and getTruststoreFile method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetTruststoreFile() {
@@ -188,7 +197,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setTruststorePassword method and getTruststorePassword method, of class MySslConfiguration.
+   * Test of setTruststorePassword method and getTruststorePassword method, of
+   * class MySslConfiguration.
    */
   @Test
   public void testSetAndGetTruststorePassword() {
@@ -200,7 +210,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setTruststoreType method and getTruststoreType method, of class MySslConfiguration.
+   * Test of setTruststoreType method and getTruststoreType method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetTruststoreType() {
@@ -211,8 +222,9 @@ public class MySslConfigurationTest {
     assertEquals(expResult, instance.getTruststoreType());
   }
 
-  /**setSslProtocol
-   * Test of setTruststoreAlgorithm method and getTruststoreAlgorithm method, of class MySslConfiguration.
+  /**
+   * setSslProtocol Test of setTruststoreAlgorithm method and
+   * getTruststoreAlgorithm method, of class MySslConfiguration.
    */
   @Test
   public void testSetAndGetTruststoreAlgorithm() {
@@ -224,13 +236,14 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setEnabledCipherSuites method and getEnabledCipherSuites method, of class MySslConfiguration.
+   * Test of setEnabledCipherSuites method and getEnabledCipherSuites method, of
+   * class MySslConfiguration.
    */
   @Test
   public void testSetAndGetEnabledCipherSuites() {
     LOG.info("Start testSetAndGetEnabledCipherSuites");
     MySslConfiguration instance = new MySslConfiguration();
-    String[] expResult={"0","1","2"};
+    String[] expResult = {"0", "1", "2"};
     instance.setEnabledCipherSuites(expResult);
     assertArrayEquals(expResult, instance.getEnabledCipherSuites());
     expResult = null;
@@ -239,7 +252,8 @@ public class MySslConfigurationTest {
   }
 
   /**
-   * Test of setKeyAlias method and getKeyAlias method, of class MySslConfiguration.
+   * Test of setKeyAlias method and getKeyAlias method, of class
+   * MySslConfiguration.
    */
   @Test
   public void testSetAndGetKeyAlias() {

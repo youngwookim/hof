@@ -1,15 +1,15 @@
 package com.spright.hof;
 
-import org.apache.ftpserver.DefaultDataConnectionConfiguration;
 import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.interfaces.DataConnectionConfiguration;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Properties;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.listener.ListenerFactory;
 
 /**
  * Start-up class of FTP server
@@ -38,7 +38,7 @@ public class HdfsOverFtpServer {
     }
 
     if (sslPort != 0) {
-      startSSLServer();
+      startSSLServer(userFile);
     }
   }
 
@@ -108,21 +108,20 @@ public class HdfsOverFtpServer {
 
     HdfsOverFtpSystem.setHDFS_URI(hdfsUri);
 
-    FtpServer server = new FtpServer();
+    FtpServerFactory serverFactory = new FtpServerFactory();
+    ListenerFactory factory = new ListenerFactory();
+    factory.setPort(port);
+    serverFactory.addListener("default", factory.createListener());
+    HdfsUserManagerFactory hdfsUserManagerFactory = new HdfsUserManagerFactory();
 
-    DataConnectionConfiguration dataCon = new DefaultDataConnectionConfiguration();
-    dataCon.setPassivePorts(passivePorts);
-    server.getListener("default").setDataConnectionConfiguration(dataCon);
-    server.getListener("default").setPort(port);
+    DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
+    dccFactory.setPassivePorts(passivePorts);
 
-    HdfsUserManager userManager = new HdfsUserManager();
-
-    userManager.setFile(userFile);
-
-    server.setUserManager(userManager);
-
-    server.setFileSystem(new HdfsFileSystemManager());
-
+    LOG.info(userFile + " exist:" + userFile.exists());
+    hdfsUserManagerFactory.setFile(userFile);
+    serverFactory.setUserManager(hdfsUserManagerFactory.createUserManager());
+    serverFactory.setFileSystem(new HdfsFileSystemManager(userFile));
+    FtpServer server = serverFactory.createServer();
     server.start();
   }
 
@@ -131,33 +130,32 @@ public class HdfsOverFtpServer {
    *
    * @throws Exception
    */
-  public static void startSSLServer() throws Exception {
+  public static void startSSLServer(final File userFile) throws Exception {
 
     LOG.info("Starting Hdfs-Over-Ftp SSL server. ssl-port: " + sslPort + " ssl-data-ports: " + sslPassivePorts + " hdfs-uri: " + hdfsUri);
 
-    HdfsOverFtpSystem.setHDFS_URI(hdfsUri);
-
-    FtpServer server = new FtpServer();
-
-    DataConnectionConfiguration dataCon = new DefaultDataConnectionConfiguration();
-    dataCon.setPassivePorts(sslPassivePorts);
-    server.getListener("default").setDataConnectionConfiguration(dataCon);
-    server.getListener("default").setPort(sslPort);
+    FtpServerFactory serverFactory = new FtpServerFactory();
+    ListenerFactory factory = new ListenerFactory();
+    factory.setPort(sslPort);
 
     MySslConfiguration ssl = new MySslConfiguration();
     ssl.setKeystoreFile(new File("ftp.jks"));
     ssl.setKeystoreType("JKS");
     ssl.setKeyPassword("333333");
-    server.getListener("default").setSslConfiguration(ssl);
-    server.getListener("default").setImplicitSsl(true);
+    factory.setSslConfiguration(ssl);
+    factory.setImplicitSsl(true);
 
-    HdfsUserManager userManager = new HdfsUserManager();
-    userManager.setFile(new File("users.conf"));
+    serverFactory.addListener("default", factory.createListener());
+    HdfsUserManagerFactory hdfsUserManagerFactory = new HdfsUserManagerFactory();
 
-    server.setUserManager(userManager);
+    DataConnectionConfigurationFactory dccFactory = new DataConnectionConfigurationFactory();
+    dccFactory.setPassivePorts(passivePorts);
 
-    server.setFileSystem(new HdfsFileSystemManager());
-
+    hdfsUserManagerFactory.setFile(userFile);
+    serverFactory.setUserManager(hdfsUserManagerFactory.createUserManager());
+    serverFactory.setFileSystem(new HdfsFileSystemManager(userFile));
+    FtpServer server = serverFactory.createServer();
     server.start();
+
   }
 }

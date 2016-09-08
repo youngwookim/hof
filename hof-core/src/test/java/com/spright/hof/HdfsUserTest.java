@@ -1,10 +1,11 @@
 package com.spright.hof;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.AuthorizationRequest;
 import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.usermanager.WriteRequest;
+import org.apache.ftpserver.usermanager.impl.WriteRequest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,13 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HdfsUserTest {
+
   private static final Logger LOG = LoggerFactory.getLogger(HdfsUserTest.class);
   private static User USER;
   private static HdfsUser HDFSUSER;
 
   private static final String DEFAULT_USERNAME = "user";
   private static final String DEFAULT_PASSWORD = "pwd";
-  private static final Authority[] DEFAULT_AUTHORITIES = null;
+  private static final List<Authority> DEFAULT_AUTHORITIES = null;
   private static final int DEFAULT_MAXIDLETIME = 123;
   private static final String DEFAULT_HOME = "/home";
   private static final boolean DEFAULT_ENABLE = false;
@@ -129,11 +131,11 @@ public class HdfsUserTest {
   @Test
   public void testSetAndgetAuthorities() {
     LOG.info("Start testSetAndgetAuthorities");
-    Authority[] authorities = new Authority[0];
+    List<Authority> authorities = new ArrayList<Authority>();
     HdfsUser instance = new HdfsUser(USER);
 
     instance.setAuthorities(authorities);
-    assertArrayEquals(authorities, instance.getAuthorities());
+    assertEquals(authorities, instance.getAuthorities());
 
     instance.setAuthorities(null);
     assertNull(instance.getAuthorities());
@@ -204,8 +206,9 @@ public class HdfsUserTest {
     Authority authority = Mockito.mock(Authority.class);
     Mockito.when(authority.canAuthorize(request)).thenReturn(true);
     Mockito.when(authority.authorize(request)).thenReturn(request);
-    Authority[] authorityArray = {authority};
-    instance.setAuthorities(authorityArray);
+    List<Authority> authorities = new ArrayList<Authority>();
+    authorities.add(authority);
+    instance.setAuthorities(authorities);
 
     assertEquals(request, instance.authorize(request));
   }
@@ -218,12 +221,14 @@ public class HdfsUserTest {
     LOG.info("Start testGetAuthorities_Class");
     Authority authority1 = Mockito.mock(Authority.class);
     Authority authority2 = Mockito.mock(Authority.class);
-    Authority[] authorities = {authority1, authority2};
+    List<Authority> authorities = new ArrayList<Authority>();
+    authorities.add(authority1);
+    authorities.add(authority2);
 
     HdfsUser instance = new HdfsUser();
     instance.setAuthorities(authorities);
-    Authority[] result = instance.getAuthorities(authority1.getClass());
+    List<Authority> result = instance.getAuthorities(authority1.getClass());
 
-    assertArrayEquals(authorities, result);
+    assertEquals(authorities, result);
   }
 }

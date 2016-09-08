@@ -27,8 +27,8 @@
     <checkstyle.version>2.16</checkstyle.version>
     <dependency.version>2.10</dependency.version>
     <assembly.version>2.5.5</assembly.version>
-    <ftpserver.version>1.0.0-M3</ftpserver.version>
-    <mina.version>2.0.1</mina.version>
+    <ftpserver.version>1.0.6</ftpserver.version>
+    <mina.version>2.0.0-M2</mina.version>
     <mockito-all.version>1.10.19</mockito-all.version>
   </properties>
 
@@ -103,6 +103,14 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${dependency.version}</version>
+          <configuration>
+            <skipTests>false</skipTests>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
