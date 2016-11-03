@@ -2,13 +2,14 @@ package com.spright.hof;
 
 import com.google.common.io.Files;
 import java.io.File;
-import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.nio.file.FileSystemException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import org.apache.ftpserver.ftplet.Authority;
@@ -317,11 +318,11 @@ public class HdfsFileObjectTest {
   public void testCreateOutputStreamAndInputStream() throws Exception {
     System.out.println("Start testCreateOutputStreamAndInputStream");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
-    OutputStream out = instance.createOutputStream(0);
-    out.write(0);
+    OutputStream out = instance.createOutputStream(1);
+    out.write(6);
     out.close();
-    InputStream in = instance.createInputStream(0);
-    assertEquals(0, in.read());
+    InputStream in = instance.createInputStream(1);
+    assertEquals(6, in.read());
     in.close();
   }
 
@@ -335,11 +336,11 @@ public class HdfsFileObjectTest {
 
     File tempFile = File.createTempFile("tempFile", ".tmp");
     String seekFile = "/home/tempFile.tmp";
-    HashMap<Integer, Integer> seekMaps = new HashMap<Integer, Integer>();
+    Map<Integer, Integer> seekMaps = new HashMap<Integer, Integer>();
     Random rand = new Random();
     try (RandomAccessFile tempRandonAccessFile = new RandomAccessFile(tempFile, "rw");) {
       for (int run = 0; run != 10; ++run) {
-        int seekLength = rand.nextInt(100);
+        int seekLength = run * 10;
         int writeValue = rand.nextInt(100);
         tempRandonAccessFile.seek(seekLength);
         tempRandonAccessFile.write(writeValue);
