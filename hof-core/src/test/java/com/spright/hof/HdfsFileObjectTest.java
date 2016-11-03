@@ -1,5 +1,8 @@
 package com.spright.hof;
 
+import com.google.common.io.Files;
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -311,12 +314,49 @@ public class HdfsFileObjectTest {
   public void testCreateOutputStreamAndInputStream() throws Exception {
     System.out.println("Start testCreateOutputStreamAndInputStream");
     HdfsFileObject instance = new HdfsFileObject(DEFAULT_FILE_PATH, HDFSUSER);
-    OutputStream out = instance.createOutputStream(1);
-    out.write(6);
+    OutputStream out = instance.createOutputStream(0);
+    out.write(0);
     out.close();
-    InputStream in = instance.createInputStream(1);
-    assertEquals(6, in.read());
+    InputStream in = instance.createInputStream(0);
+    assertEquals(0, in.read());
     in.close();
   }
 
+  /**
+   * Test of createOutputStream and createInputStream method, of class
+   * HdfsFileObject.
+   */
+  @Test
+  public void testCreateIntputStreamSeekWorking() throws IOException {
+    System.out.println("Start testCreateOutputStreamAndInputStream");
+    int seekLength = 6;
+    int writeValue = 22;
+    File tempFile = File.createTempFile("tempFile", ".tmp");
+    String seekFile = "/home/tempFile.tmp";
+    try (RandomAccessFile tempRandonAccessFile = new RandomAccessFile(tempFile, "rw");) {
+      tempRandonAccessFile.seek(seekLength);
+      tempRandonAccessFile.write(writeValue);
+    }
+    DFS.create(new Path(seekFile));
+    String owner = DFS.getFileStatus(new Path(seekFile)).getOwner();
+    User user = user = Mockito.mock(User.class);
+    Mockito.when(user.getName()).thenReturn(owner);
+    Mockito.when(user.getPassword()).thenReturn(DEFAULT_PASSWORD);
+    Mockito.when(user.getAuthorities()).thenReturn(DEFAULT_AUTHORITIES);
+    Mockito.when(user.getMaxIdleTime()).thenReturn(DEFAULT_MAXIDLETIME);
+    Mockito.when(user.getHomeDirectory()).thenReturn(DEFAULT_HOME);
+    Mockito.when(user.getEnabled()).thenReturn(DEFAULT_ENABLE);
+    HdfsUser hdfsUser = new HdfsUser(user);
+    HdfsFileObject instance = new HdfsFileObject(seekFile, hdfsUser);
+    try (OutputStream out = instance.createOutputStream(0)) {
+      Files.copy(tempFile, out);
+    }
+    tempFile.delete();
+
+    int expect;
+    try (InputStream in = instance.createInputStream(seekLength)) {
+      expect = in.read();
+    }
+    assertEquals(writeValue, expect);
+  }
 }
