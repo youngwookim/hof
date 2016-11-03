@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystemException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Random;
 import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
@@ -327,15 +330,21 @@ public class HdfsFileObjectTest {
    * HdfsFileObject.
    */
   @Test
-  public void testCreateIntputStreamSeekWorking() throws IOException {
+  public void testCreateIntputStreamWithSeek() throws IOException {
     System.out.println("Start testCreateOutputStreamAndInputStream");
-    int seekLength = 6;
-    int writeValue = 22;
+
     File tempFile = File.createTempFile("tempFile", ".tmp");
     String seekFile = "/home/tempFile.tmp";
+    HashMap<Integer, Integer> seekMaps = new HashMap<Integer, Integer>();
+    Random rand = new Random();
     try (RandomAccessFile tempRandonAccessFile = new RandomAccessFile(tempFile, "rw");) {
-      tempRandonAccessFile.seek(seekLength);
-      tempRandonAccessFile.write(writeValue);
+      for (int run = 0; run != 10; ++run) {
+        int seekLength = rand.nextInt(100);
+        int writeValue = rand.nextInt(100);
+        tempRandonAccessFile.seek(seekLength);
+        tempRandonAccessFile.write(writeValue);
+        seekMaps.put(seekLength, writeValue);
+      }
     }
     DFS.create(new Path(seekFile));
     String owner = DFS.getFileStatus(new Path(seekFile)).getOwner();
@@ -353,10 +362,14 @@ public class HdfsFileObjectTest {
     }
     tempFile.delete();
 
-    int expect;
-    try (InputStream in = instance.createInputStream(seekLength)) {
-      expect = in.read();
+    int actual;
+    for (Entry<Integer, Integer> seekMap : seekMaps.entrySet()) {
+      int seekLength = seekMap.getKey();
+      int writeValue = seekMap.getValue();
+      try (InputStream in = instance.createInputStream(seekLength)) {
+        actual = in.read();
+        assertEquals(writeValue, actual);
+      }
     }
-    assertEquals(writeValue, expect);
   }
 }
