@@ -1,6 +1,7 @@
 HOF Change Log
 Release 0.1.1 - unrelased
     BUG FIXES
+      HOF-0011 Fix InputStream seek Bug
     TASKS
     IMPROVEMENT
       HOF-0001 Add the mockito and junit
