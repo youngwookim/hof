@@ -418,6 +418,7 @@ public class HdfsFileObject implements FtpFile {
     try {
       DistributedFileSystem dfs = HdfsOverFtpSystem.getDfs();
       FSDataInputStream in = dfs.open(path);
+      in.seek(l);
       return in;
     } catch (IOException e) {
       e.printStackTrace();
